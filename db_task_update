@@ -1,0 +1,123 @@
+# =====================================================================
+#
+# Script Name : db_task_update
+#
+# Usage       : $0 -i -m -s{AFRX}
+#    -i         TASKID - task identifier
+#    -m         SCRIPTID - script identifier
+#    -s{AFRX}   SCRIPT STATUS - script status to:
+#                A Active
+#                F Finshed/Completed
+#                X Failed
+#                R Ready to run 
+#
+# Description : Update a scripts activity status.
+#               This script updates the task infomation on
+#               the scriptctl's database using the stored
+#               procedure au_update_task_status.
+#
+# Called by   : Script Ctl Application /
+#               Admin Tool /
+#               or can be run stand alone - see Usage
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   24-09-1999  Created
+# =====================================================================
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+USAGE="
+$0 - scriptctl utility - update a scripts activity status 
+Version 1.0.0
+Usage: $0 -i -m -s{AFRX}
+\t-i         TASKID - task identifier
+\t-m         SCRIPTID - script identifier
+\t-s{AFRX}   SCRIPT STATUS - script status to:
+\t            A Active
+\t            F Finshed/Completed
+\t            X Failed
+\t            R Ready to run 
+"
+
+function Usage {
+   if [[ -n $1 ]];
+   then
+      echo "$0: --illegal option -- $1"
+      echo "${USAGE}" >&2
+   else
+      echo "Error: Insufficient arguments"
+      echo "${USAGE}" >&2
+   fi
+
+   exit 1
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+while getopts "i:m:s:" option;
+do
+   case "$option" in
+   i)   _TASKID="${OPTARG}";;
+   m)   _SCRIPTID="${OPTARG}";;
+   s)   _SCRIPTSTATUS="${OPTARG}";;
+   *)   Usage $option;;
+   esac
+done
+
+if [ "$_TASKID" = "" ] ||
+   [ "$_SCRIPTID" = "" ] ||
+   [ "$_SCRIPTSTATUS" = "" ] 
+then
+   Usage;
+fi
+
+
+#           #
+# DBMS Pipe #
+#           #
+
+PROGSTATUS=`DB_run_query_pipe <<! 
+
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+
+DECLARE
+   p_error            NUMBER        :=0;
+   p_error_message    VARCHAR2(255) :=NULL;
+BEGIN
+   IF NOT pk_audit_lib.au_update_task_status(
+      ${_TASKID}
+     ,${_SCRIPTID}
+     ,'${_SCRIPTSTATUS}'
+     ,'${_DEBUG}'
+     ,p_error
+     ,p_error_message)
+   THEN
+      dbms_output.put_line('-1');
+   ELSE
+      dbms_output.put_line('0');
+   END IF;
+END;
+/
+!`
+
+#                   #
+# Set the exit code #
+#                   #
+
+if [ "$PROGSTATUS" = "0" ]; 
+then 
+  exit 0;
+else
+  exit -1;
+fi
+ 

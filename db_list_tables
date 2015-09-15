@@ -1,0 +1,62 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_list_tables
+#
+# Author           :	DL
+#
+# Usage            : 	DB_LIST_TABLES
+#
+# Description      :	list all tables this DB_LOGIN has access to
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - list all tables this DB_LOGIN has access to 
+Usage: $0 
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+SELECT_TABLES(){
+
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select owner||'.'||table_name from all_tables
+where owner <> 'SYS' and owner <> 'SYSTEM'
+order by table_name;
+!
+}
+
+####
+# Main
+####
+
+CHK_PARAM
+SELECT_TABLES
+
+#### END ####

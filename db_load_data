@@ -1,0 +1,92 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_load_data
+#
+# Author           :	DL
+#
+# Usage            :	$(basename $0) <Control file name> <Data file name> 
+#
+# Description      :	use SQL loader to load data
+#
+# Calls            :	None
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+
+cat <<!
+$(basename $0) - use SQL loader to load data 
+
+Usage: $(basename $0) <Control file name> <Data file name> 
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 2 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_CONTROL_FILE(){
+	
+ctlfile=$1
+if [ ! -r "${ctlfile}" ]
+then
+    ctlfile=$1.ctl
+    if [ ! -r "${ctlfile}" ]
+    then
+        echo "Error: Cannot read sqlload control file: ${1}" >&2
+	USAGE >&2
+	exit 1
+    fi
+fi
+}
+
+CHK_DATA_FILE(){
+
+datafile=$2
+if [ ! -r "${datafile}" ]
+then
+    datafile=$2.dat
+    if [ ! -r "${datafile}" ]
+    then
+        echo "Error: Cannot read sqlload data file: ${2}" >&2
+	USAGE >&2
+	exit 1
+    fi
+fi
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1 $2
+CHK_CONTROL_FILE $1
+CHK_DATA_FILE $2
+
+if [ -z "${SQLLOADER}" ]
+then
+    SQLLOADER="sqlload"
+fi
+
+#DB_LOGIN is exported from .profile DB_LOGIN=$ORACLE_LOGIN/$ORACLE_PASSWD
+echo "${DB_LOGIN}" | ${SQLLOADER} CONTROL=${ctlfile} DATA=${datafile}
+
+#### END ####

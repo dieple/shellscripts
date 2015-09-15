@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_object_list_like
+#
+# Author           :	DL
+#
+# Usage            :	$(basename $0) <pattern_to_match> 
+#
+# Description      :	list all tables, views and indexes named like %\$1%
+#
+# Calls            :	db_list_tables 
+#			db_list_views
+#			db_list_indexes2
+#	
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - list all tables, views and indexes named like %\$1% 
+
+Usage: $(basename $0) <pattern_to_match> 
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+GET_LIST(){
+
+PATTERN=$(echo $1 | tr '[a-z]' '[A-Z]')
+${HOME}/bin/db_list_tables |grep ${PATTERN} | sed 's/$/		TABLE/'
+${HOME}/bin/db_list_views | grep ${PATTERN} | sed 's/$/		VIEW/'
+${HOME}/bin/db_list_indexes2 | grep ${PATTERN}
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1
+GET_LIST $1  | sort
+
+#### END ####

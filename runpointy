@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# build
+cd $POINTY_HOME
+mvn clean install -f pointy-parent/pom.xml
+mvn clean install -f pointy-build/pom.xml
+
+
+# run test
+cd $POINTY_HOME
+mvn clean install -Pdev,alltests -f pointy-build/pom.xml
+
+# run app
+cd $POINTY_HOME
+mvn clean install -f pointy-build/pom.xml -Palltests,dev
+mvn jetty:run -Palltests,dev -f pointy-web/pom.xml

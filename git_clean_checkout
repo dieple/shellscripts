@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# this which checks out all files from the index, overwriting working tree files
+
+
+cd $LUCAS_HOME
+git checkout-index -a -f

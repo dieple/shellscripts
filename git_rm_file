@@ -1,0 +1,60 @@
+#!/bin/bash
+
+###
+# Removing a file from git repo
+###
+
+PROG="`basename $0`"
+FILE=""
+FORCE="FALSE"
+
+usage()
+{
+	echo ""
+	echo "Usage: $PROG [options]"
+	echo ""
+	echo "[-f force]  Force removal "
+	echo ""
+	echo "[-n file]   File to remove from git repo"
+	echo ""
+	echo ""
+}
+
+
+#
+# Main program
+#
+
+while getopts "fn:?" 2> /dev/null ARG
+do
+	case $ARG in
+
+		f)	FORCE="TRUE";;
+
+		n)	FILE=$OPTARG;;
+
+		?)	usage
+			exit 1;;
+	esac	
+done
+
+if [ "$FILE" = "" ]
+then
+        echo ""
+        echo "$PROG: A file name is required !"
+        echo ""
+	usage
+        exit 1
+fi
+
+cd $LUCAS_HOME
+if [ "$FORCE" = "TRUE" ]
+then
+	git rm -f "$FILE"
+else
+	git rm "$FILE"
+fi
+
+###
+# End
+###

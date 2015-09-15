@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+# this is use when you're on a branch wanting to pull the
+# latest from develop branch
+#
+
+cd $LUCAS_HOME
+git fetch
+git rebase origin/develop

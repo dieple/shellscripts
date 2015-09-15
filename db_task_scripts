@@ -1,0 +1,140 @@
+# =====================================================================
+#
+# Script Name : db_task_scripts
+#
+# Usage       : $0 -i [-s]
+#    -i         TASKID - task identifier 
+#   [-s]        optional SCRIPTID - script identifier to list from
+#               leaving null will list all scripts associated 
+#
+# Description : List all scripts associated with a task.
+#               This script extracts all the script information
+#               directly from the scriptctl database. 
+#
+# Called by   : Script Ctl Application /
+#               Admin Tool / 
+#               or can be run stand alone - see Usage
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   24-09-1999  Created
+# =====================================================================
+
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+USAGE="
+$0 - scriptctl utility - list scripts assigned to a task  
+Version 1.0.0
+Usage: $0 -i [-s]
+\t -i        TASKID - task identifier
+\t[-s]       optional SCRIPTID - script identifier to list from
+\t           leaving null will list all scripts associated
+"
+
+function Usage {
+   if [[ -n $1 ]];
+   then
+      echo "$0: --illegal option -- $1"
+      echo "${USAGE}" >&2
+   else
+      echo "Error: Insufficient arguments"
+      echo "${USAGE}" >&2
+   fi
+
+   exit 1
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+while getopts "i:s:" option;
+do
+   case "$option" in
+   i) _TASKID="${OPTARG}";;
+   s) _SCRIPTID="${OPTARG}";;
+   *) Usage $option;; 
+   esac
+done
+
+if [[ -z "$_TASKID" ]];
+then
+   Usage;
+fi 
+
+
+#                           #
+# get the list scripts FROM #
+# identifier if present     #
+#                           #
+
+if [[ -z "$_SCRIPTID" ]];
+then
+   _RESTARTSQL=""
+else
+   _RESTARTSQL="AND      script_seqno >= (SELECT script_seqno
+                                          FROM au_task_scripts
+                                          WHERE script_id = $_SCRIPTID)"
+fi
+
+
+#           # 
+# DBMS Pipe #
+#           #
+
+(sqlplus -s $DB_LOGIN <<!!!
+   SET FEEDBACK OFF
+   SET SERVEROUTPUT ON 
+   DECLARE
+      CURSOR c_get_task_scripts IS
+      SELECT   script_id 
+              ,script_name
+              ,script_seqno
+              ,script_params
+      FROM     au_task_scripts
+      WHERE    task_id = $_TASKID
+      AND      script_live = 'L'
+      ${_RESTARTSQL} 
+      ORDER BY script_seqno;
+
+      v_function      VARCHAR2(50)  := 'PLSQL-db_task_scripts';
+      v_script_id     NUMBER(10)    := NULL;
+      v_script_name   VARCHAR2(50)  := NULL;  
+      v_script_params VARCHAR(250)  := NULL;
+      v_script_seqno  NUMBER(10)    := NULL;
+      p_error         NUMBER(10)    := NULL;
+      p_error_message VARCHAR2(255) := NULL;
+
+   BEGIN
+
+      OPEN c_get_task_scripts;
+      LOOP
+         FETCH c_get_task_scripts INTO  v_script_id
+                                       ,v_script_name
+                                       ,v_script_seqno
+                                       ,v_script_params;
+         EXIT WHEN c_get_task_scripts%NOTFOUND;
+         dbms_output.put_line(v_script_id||':'||v_script_name
+                              ||':'||v_script_seqno||':'||v_script_params);
+      END LOOP;
+
+      CLOSE c_get_task_scripts;
+
+   EXCEPTION
+      WHEN OTHERS THEN
+         p_error         := SQLCODE;
+         p_error_message := rtrim(substr(SQLERRM,1,200));
+         p_error_message := p_error_message||'-'||v_function;
+
+END;
+/
+!!!
+)
+

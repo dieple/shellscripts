@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_run_query_script_check
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <SQL commands file name>
+#
+# Description      :	Run a SQL command file and check for errors
+#
+# Calls            :	db_run_query_script
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     30-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - Run a SQL command file and check for errors 
+
+Usage: $(basename $0) <SQL commands file name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+RUN_SCRIPT(){
+
+${HOME}/bin/db_run_query_script ${1} | grep "ERROR"
+
+if [ $? -eq 0 ]  ## error exists if true
+then
+    exit 1   # exit with errors
+else  
+    exit 0   # no errors
+fi
+}
+
+####
+# main
+####
+
+CHK_PARAM $1
+RUN_SCRIPT $1
+
+#### END ####

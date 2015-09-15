@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_column_exists	
+#
+# Author           :	DL
+#
+# Usage            : 	$0 <Table/View name> <Column name>
+#
+# Description      :	check to see if a column exists in an object
+#
+# Calls            :	db_object_not_exists
+#			db_desc
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - check to see if a column exists in an object 
+
+Usage: $(basename $0) <Table/View name> <Column name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 2 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_TABLE(){
+if ${HOME}/bin/db_object_not_exists ${1}
+then
+    echo "Error: Specified Table/View ${1} does not exist or insufficient priviledges" >&2
+    exit 1
+fi
+
+${HOME}/bin/db_desc ${1} | grep -i "^${2}[ 	]" >/dev/null
+if [[ $? -eq "0" ]]
+then
+    #echo column ${2} exists in table ${1}
+    exit 0
+else
+    #echo column ${2} does not exist in table ${1}
+    exit 1
+fi
+}
+
+#### 
+# Main
+####
+
+CHK_PARAM $1 $2
+CHK_TABLE $1 $2
+
+#### END ####

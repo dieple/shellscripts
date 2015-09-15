@@ -1,0 +1,78 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_run_query_script
+#
+# Author           :	DL
+#
+# Usage            : 	$0 <SQL commands file name> 
+#			<[ noisy (remove -s option on sqlplus) ]>
+#
+# Description      :	Run a SQL command file
+#
+# Calls            :	None
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - Run a SQL command file 
+
+Usage: $0 <SQL commands file name> <[ noisy (remove -s option on sqlplus) ]> 
+!
+}
+
+RUN_SCRIPT(){
+
+SQLPLUS="sqlplus ${SILENT}"
+sqlfile=$1
+
+if [ ! -r "${sqlfile}" ]
+then
+    sqlfile=$1.sql
+    if [ ! -r "${sqlfile}" ]
+    then
+       echo "Error: Cannot read SQL command file: ${1}" >&2
+       USAGE >&2
+       exit 1
+    fi
+fi
+
+
+${SQLPLUS} ${DB_LOGIN} <${sqlfile}
+}
+
+####
+# Main
+####
+
+
+if [ $# -lt 1 -o $# -gt 2 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+
+if [ $# -eq 2 ]
+then
+    SILENT=
+else
+    SILENT="-s"
+fi
+
+RUN_SCRIPT $1
+
+#### END ####

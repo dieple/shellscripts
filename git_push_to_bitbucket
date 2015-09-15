@@ -1,0 +1,72 @@
+#!/bin/bash
+
+###
+# Start New Feature and base your feature branch on develop 
+# (git checkout -b feature/PHX-nn-a-short-description)
+###
+
+PROG="`basename $0`"
+DESC=""
+MODULE_NUMBER=""
+FEATURE="TRUE"
+
+usage()
+{
+	echo ""
+	echo "Usage: $PROG [options]"
+	echo ""
+	echo "[-b bug branch]   Push to bitbucket using BUG branch"
+	echo ""
+	echo "[-d desc]   Short description of new feature"
+	echo ""
+	echo "[-n module number]   Module number"
+	echo ""
+}
+
+
+#
+# Main program
+#
+
+while getopts "bd:n:?" 2> /dev/null ARG
+do
+	case $ARG in
+
+		b)	FEATURE="FALSE";;
+
+		d)	DESC=$OPTARG;;
+
+		n)	MODULE_NUMBER=$OPTARG;;
+
+		?)	usage
+			exit 1;;
+	esac	
+done
+
+if [ "$DESC" = "" ]
+then
+        echo ""
+        echo "$PROG: Short description is required !"
+        echo ""
+	usage
+        exit 1
+fi
+
+if [ "$MODULE_NUMBER" = "" ]
+then
+        echo ""
+        echo "$PROG: Module number is required !"
+        echo ""
+	usage
+        exit 1
+fi
+
+
+cd $LUCAS_HOME
+
+if [ "$FEATURE" = "TRUE" ]
+then
+	git push origin "feature/PHX-$MODULE_NUMBER-$DESC"
+else
+	git push origin "bug/PHX-$MODULE_NUMBER-$DESC"
+fi

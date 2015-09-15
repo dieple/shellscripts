@@ -1,0 +1,75 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_count_rows
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0)  <Table/View name>
+#
+# Description      :	count rows for an object
+#
+# Calls            :	db_object_not_exists
+#			db_run_query_pipe
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - count rows for an object 
+
+Usage: $(basename $0)  <Table/View name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_EXISTS(){
+
+# Validate existence of the requested table or view
+if ${HOME}/bin/db_object_not_exists ${1}
+then
+    echo "Object does not exist."
+    exit 1
+fi
+}
+
+COUNT_ROWS(){
+
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select count('1') from $1;
+!
+}
+
+
+####
+# Main
+####
+
+CHK_PARAM $1
+CHK_EXISTS $1
+COUNT_ROWS $1
+
+#### END ####

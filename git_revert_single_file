@@ -1,0 +1,5 @@
+git checkout v1.2.3 -- file         # tag v1.2.3
+git checkout stable -- file         # stable branch
+git checkout origin/master -- file  # upstream master
+git checkout HEAD -- file           # the version from the most recent commit
+git checkout HEAD^ -- file          # the version before the most recent commit

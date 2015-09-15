@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# A simple shell to mount disk encryption based parition under Linux.
+# Tested on Debian and Ubuntu base NAS servers.
+# ----------------------------------------------------------------------------
+ 
+PROG=$(basename $0)
+MAPPER=""
+DEVICE_MAPPER=""
+FRONTMAP="/dev/mapper"
+
+usage()
+{
+	echo "$0 -d -m"
+	echo "[-d /dev/sdc1]"
+	echo "[m personal / MyPassport]"
+	 
+}
+
+# Process the command line arguments
+while getopts d:m:? 2> /dev/null ARG
+do
+	case $ARG in
+
+			# /dev/sdc1
+		d)      DEVICE_MAPPER=$OPTARG;; 
+
+			# personal / MyPassport
+		m)      MAPPER=$OPTARG;;
+
+		?)      usage
+			exit 1;;
+	esac
+done
+
+### commands ###
+_crypt="/sbin/cryptsetup"
+_vg="/sbin/vgscan"
+_vgc="/sbin/vgchange"
+_mnt="/bin/mount"
+ 
+
+if [ -z "$DEVICE_MAPPER" ] || [ -z "$MAPPER" ]
+then
+	usage;
+	exit
+fi
+
+
+### Partition specific settings ###
+### SET ME FIRST ###
+_device="$DEVICE_MAPPER"
+#_mnts="/dev/sdc1 "
+_mnts="$FRONTMAPPER/$MAPPER "
+_mntd="/mnt/$MAPPER"
+ 
+echo 
+sudo ${_crypt} luksOpen ${_device} $MAPPER
+ 
+echo 
+sudo ${_vg} --mknodes
+sudo ${_vgc} -ay
+ 
+echo 
+sudo ${_mnt} ${_mnts} ${_mntd}

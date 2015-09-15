@@ -1,0 +1,71 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_is_up
+#
+# Author           :	DL
+#
+# Usage            : 	db_is_up
+#
+# Description      :	check if the database is up
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+
+cat <<!
+$(basename $0) check if the database is up 
+
+Usage: $(basename $0)
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_DB(){
+
+DB_RETURN=`echo "\
+set pages 0;
+set feedback off;
+select '1'
+from dual;
+" | ${HOME}/bin/db_run_query_pipe`
+echo $DB_RETURN
+}
+
+####
+# Main
+####
+
+CHK_PARAM
+
+if [ "$(CHK_DB)" = "1" ]; then
+#    echo Database ${ORACLE_SID} is up
+    exit 0
+else
+    #echo Database ${ORACLE_SID} is not up
+    exit 1
+fi
+
+#### END ####

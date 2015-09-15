@@ -1,0 +1,60 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_object_exists
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0)  <Object (Table/View) name>
+#
+# Description      :	check if an object exists in the database
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - check if an object exists in the database 
+
+Usage: $(basename $0)  <Object (Table/View) name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1
+
+if ${HOME}/bin/db_object_type ${1} >/dev/null
+then
+	#echo object ${1} exists
+	exit 0
+fi
+
+#echo object ${1} does not exist
+exit 1
+
+#### END ####

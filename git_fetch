@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $LUCAS_HOME
+git fetch

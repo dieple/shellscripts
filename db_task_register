@@ -1,0 +1,117 @@
+# =====================================================================
+#
+# Script Name : db_task_register
+#
+# Usage       : $0 -n -s [-a]
+#    -n         Task Name -  String 
+#    -s         Task Source system - String
+#   [-a]        optional Audit Level - Number 
+#
+# Description : Register task with scriptctl 
+#
+# Called by   : Admin Tool /
+#               or can be run stand alone - see Usage
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   24-09-1999  Created
+# =====================================================================
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+USAGE="
+$0 - scriptctl utility - register a task with scriptctl 
+Version 1.0.0
+Usage: $0 -n -s [-a]
+\t-n         Task Name -  String 
+\t-s         Task Source system - String
+\t[-a]       optional Audit Level - Number 
+"
+
+function Usage {
+   if [[ -n $1 ]];
+   then
+      echo "$0: --illegal option -- $1"
+      echo "${USAGE}" >&2
+   else
+      echo "Error: Insufficient arguments"
+      echo "${USAGE}" >&2
+   fi
+
+   exit 1
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+while getopts "n:s:a:" option;
+do
+   case "$option" in
+   n)   _TASKNAME="${OPTARG}";;
+   s)   _TASKSRC="${OPTARG}";;
+   a)   _AUDITLEVEL="${OPTARG}";;
+   *)   Usage $option;;
+   esac
+done
+
+if [[ -z "$_TASKNAME" ]] ||
+   [[ -z "$_TASKSRC" ]];
+then
+   Usage;
+fi
+
+
+#           #
+# DBMS Pipe #
+#           #
+
+PROGSTATUS=`DB_run_query_pipe <<! 
+
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+
+DECLARE
+   p_error            NUMBER        :=0;
+   p_error_message    VARCHAR2(255) :=NULL;
+BEGIN
+   INSERT INTO au_task (
+     task_id 
+    ,task_name
+    ,task_src_system
+    ,task_audit_level
+    ,cur_script_id
+    ,cur_script_status
+    ,cur_script_dttm
+    ,end_script_id )
+    VALUES (
+     au_task.nextval
+    ,UPPER("$_TASKNAME")
+    ,UPPER("$_TASKSRC")
+    ,NVL("$_AUDITLEVEL",10)
+    ,0
+    ,R
+    ,SYSDATE
+    ,0);
+ 
+END;
+/
+!`
+
+#                   #
+# Set the exit code #
+#                   #
+
+if [ "$PROGSTATUS" = "0" ]; 
+then 
+  exit 0;
+else
+  exit -1;
+fi
+ 

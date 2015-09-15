@@ -1,0 +1,4 @@
+#sudo umount /mnt/MyPassport
+sudo umount /dev/sdb1
+#sudo umount /dev/mapper/MyPassport
+sudo cryptsetup luksClose /mnt/MyPassport

@@ -1,0 +1,162 @@
+#
+#
+# Script Name      : db_check_seqment
+#
+# Author           : DL
+#
+# Usage            : usage: $(basename $0)  <TABLE> <TABLESPACE> 
+#
+# Description      :
+#
+# Calls            :
+#
+# Called By        :
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+# 
+# =====================================================================
+
+
+####
+# Global variables
+####
+
+TABLESPACE=$2
+TABLE_NAME=$(echo $1|tr [a-z] [A-Z])      # Convert table name to uppercase
+TAB_EXT=$(grep $TABLE_NAME" " $EXPLOG/exptab.log|tail -1| awk '{echo $15}')
+NEXT_EXT=$(grep $TABLE_NAME" " $EXPLOG/exptab.log|tail -1| awk '{echo $14}')
+INIT_EXT=$(grep $TABLE_NAME" " $EXPLOG/exptab.log|tail -1| awk '{echo $13}')
+
+
+USAGE(){
+
+    echo "usage: $(basename $0)  <TABLE> " >&2
+    echo "Example: $(basename $0)  ACCOUNTS " >&2
+    echo "or " >&2 
+    echo "usage: $(basename $0)  <TABLE> <TABLESPACE> " >&2
+    echo "Example: $(basename $0)  ACCOUNTS  USERS " >&2
+    exit 1
+}
+
+CHK_XPORT_TABLE(){
+
+if [ -f $EXPLOG/exptab.log ]             # Check that the table was exported  
+then
+   EXIST=`grep $TABLE_NAME" " $EXPLOG/exptab.log`
+   if [ "$EXIST" = "" ]
+   then
+      echo "1" 
+      exit 2                                                      
+   fi
+fi
+}
+
+GET_TSPACE(){
+
+if [ "$TABLESPACE" = "" ]
+then
+   TSPACE=$(grep $TABLE_NAME" " $EXPLOG/exptab.log|tail -1| awk '{echo $12}')
+else
+   TSPACE=$(echo $TABLESPACE | tr [a-z] [A-Z])      # Convert tablespace to uppercase
+fi
+}
+
+GET_SPOOL_FILE(){
+# Blank file if free segments < initial ext
+cat <<! | ${HOME}/bin/db_run_query_pipe 
+--set heading off pagesize 0 verify off  feedback off  
+spool /tmp/${TSPACE}.${TABLE_NAME}.lis
+select bytes from dba_free_space
+where bytes >= ${INIT_EXT}
+and tablespace_name = '${TSPACE}'
+order by 1 desc;
+spool off
+!
+}
+
+PROCESS_SEGMENT(){
+# ----------------------------------------------------------------------------
+#
+#  If the spool file is blank, then the table cannot be created. The ! -s 
+#  flag is used for blank files.
+ 
+#set -x
+INT_CNT=1     #  Set the initial extent counter
+
+  if [ ! -s "/tmp/${TSPACE}.${TABLE_NAME}.lis" ]  
+  then 
+    echo  "1 Failed"    
+    exit 3
+  else
+  
+       while read  xx                   # Read the spool file
+       do
+        SEG=`echo "$xx\n"`            # Get the first line
+
+       # --------------------------------------------------------------- 
+       if [ $INT_CNT -eq 1 ]              # If this is the Initial extent
+       then   
+        SEG=`expr $SEG - $INIT_EXT`     # Availabe free space in segment
+        TAB_EXT=`expr $TAB_EXT - 1`          # Subtract 1 from the extents
+       else
+        SEG=`expr $SEG - $NEXT_EXT`
+       fi
+
+       # --------------------------------------------------------------- 
+       if  [ $TAB_EXT -eq 0 ]     # break if there are no more table extents
+       then
+           echo  "0"
+           exit 
+       else
+           echo  "1 Failed"
+       fi
+
+       # --------------------------------------------------------------- 
+   
+       if [ $SEG -ge $NEXT_EXT ]  # If the free space >= next table extent
+        then
+        while true     # loop while there are more table extents
+        do
+          if [ $TAB_EXT -gt 0 ]
+          then
+           if [ $SEG -le 0 ]      # if there is still space in this fragment
+           then
+             break                        # Exit loop if no space left in seg.
+           else
+             TAB_EXT=`expr $TAB_EXT - 1`  # Subract 1 from the table extents
+             SEG=`expr $SEG - $NEXT_EXT`  # Subtract the next extent
+           fi
+          else
+             break                # Exit when there are no more table extents
+          fi
+        done
+       fi
+
+       INT_CNT=`expr $INT_CNT + 1`
+       done < /tmp/${TSPACE}.${TABLE_NAME}.lis 
+   
+   fi
+}
+
+
+####
+# Main
+####
+
+
+if [ $# -lt 1 -o $# -gt 2 ]     # Check for the input parameters
+then   
+    USAGE
+fi
+
+CHK_XPORT_TABLE
+GET_TSPACE
+GET_SPOOL_FILE
+PROCESS_SEGMENT
+
+#### END ####

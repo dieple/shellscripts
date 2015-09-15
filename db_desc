@@ -1,0 +1,75 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_desc
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <Table/View name OR owner.table_name>
+#
+# Description      :	describe an object in the database and 
+#			remove report formatting. Useful for shell scripting
+#			as well as getting a quick description of a table/view
+#			from the database without having to manually logging
+#			into a sqlplus session!
+#
+# Calls            :	db_run_query_pipe
+#			db_object_not_exists
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - describe an object in the database and remove report formatting 
+
+Usage: $(basename $0) <Table/View name OR owner.table_name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+   echo "Error: Incorrect number of arguments" >&2
+   USAGE
+   exit 1
+fi
+}
+
+DESCRIBE(){
+cat <<! | ${HOME}/bin/db_run_query_pipe 	# DB_run_query_pipe
+set pages 0;
+set feedback off;
+desc $1;
+!
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1
+
+# Validate existence of the requested table or view
+if ${HOME}/bin/db_object_not_exists ${1}
+then
+   echo "Object does not exist."
+   exit 1
+fi
+
+DESCRIBE $1 | grep -v 'Null\?' |grep -v '\-\-\-\-' |\
+grep -v '^$' | sed -e 's/^ //' -e 's/NOT NULL/        /'
+
+### End ###

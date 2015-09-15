@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_run_query_script_audit
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <SQL commands file name>
+#
+# Description      :	Run SQL command file after adding auditing info
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     30-11-2000  Created
+#
+# =====================================================================
+
+USAGE(){
+cat <<!
+$(basename $0) - Run SQL command file after adding auditing info 
+
+Usage: $(basename $0) <SQL commands file name>  
+!
+}
+
+RUN_SCRIPT(){
+
+SQLFILE=$1
+RUN_FILE=$(cat $SQLFILE)
+
+cat <<!  | ${HOME}/bin/db_run_query_pipe
+set time on;
+set echo on;
+set num 18;
+${RUN_FILE}
+exit sql.sqlcode;
+!
+}
+
+
+####
+# Main
+####
+
+if [ $# -lt 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+
+RUN_SCRIPT $1
+
+#### END ####

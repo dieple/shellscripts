@@ -1,0 +1,550 @@
+-- A simple Hospital Losgistics datagen script
+-- to import assignment initially for testing
+-- this can be easily extended for large volume
+
+--Truncate Table Import.Imports
+--Truncate Table Import.Picks
+
+--select * from import.imports
+--select * from import.picks
+
+----------------------------------------------------------------
+--- Assignment number 1
+----------------------------------------------------------------
+INSERT INTO [HospitalLogistics].[Import].[Imports]
+           ([FileTypeID]
+           ,[Created]
+           ,[Updated]
+           ,[Filename]
+           ,[Status])
+     VALUES
+           (1
+           ,current_timestamp
+           ,current_timestamp
+           ,'1000000' -- marker for file to update later
+           ,'Queued');
+
+--- INSERTING RECORD # 1
+INSERT INTO [HospitalLogistics].[Import].[Picks]
+([ImportID],[RowLineNumber] ,[ColumnValidationStatusID],[ImportAction],[Created],[Updated],[RecordID],[Route],[Stop],[ShipDate],[DispatchTime],[Assignment],[CustomerNumber],[CustomerName],[CustomerDescription],[CustomerAddress1],[CustomerAddress2],[CustomerCity],[CustomerState]
+,[CustomerZip],[CustomerCountry],[CustomerPhone],[CustomerFax],[ContactInfo],[ContactInfo2],[CustomerSpecialInstruction],[CustomerAuditPct],[CustomerAuditFrequency],[PickSection],[Warehouse],[LocationAisle],[LocationBay],[LocationLevel]
+,[LocationSlot],[LocationCheckString],[LocationSequenceNumber],[ProductCode],[ProductDescription],[ProductName],[UnitOfMeasure],[ProductCube],[ProductWeight],[BaseProductFlag],[BaseProductThreshold],[WeightMin]
+,[WeightMax],[WeightEMin],[WeightEMax],[TargetWeight],[CatchWeightFlag],[EnforceExpDateRangeFlag],[ExpDateFormat],[DaysToExpiration],[LotNumberCapture],[UPCFlag],[UPCCheckFrequency],[ProductPrice],[EnforceCatchWeightRangeFlag]
+,[CaptureSerialNumber],[ProductAuditPct],[ProductSpecialInstruction],[ProductImageUrl],[Invoice],[AddOnFlag],[LineNumber],[QuantityOrdered],[CatchWeightAtPickFlag],[ToLocation],[ToLocationType],[ToLocationCheckString]
+,[Label],[FromLocationType],[ResponseType],[PickSpecialInstruction],[LotNumber],[WorkTypeCode],[UPC1],[UPC2],[UPC3],[ErrorReasonCode],[BaseUOM],[NumContainerType1],[NumContainerType2],[NumContainerType3],[StagingLocation],[BaseUOMQuantity])
+	 VALUES
+           (
+		1000000, -- ImportID  (Markers for update later)
+		1, -- RowLineNumber
+		1, -- ColumnValidationStatusID
+		'X', -- ImportAction
+		current_timestamp, -- Created
+		current_timestamp, -- Updated
+		'1', -- RecordID
+		'1', -- Route
+		'1', -- Stop
+		CONVERT (VARCHAR(8), SYSDATETIME(), 112), -- ShipDate
+		REPLACE(CONVERT (VARCHAR(8), SYSDATETIME(), 114),':',''), -- DispatchTime
+		'11111', -- Assignment
+		'0001000857', -- CustomerNumber
+		'R419010 -BZ - OK Algemeen', -- CustomerName
+		'R419010 -BZ - OK Algemeen', -- CustomerDescription
+		'RETAIL HOUSE', -- CustomerAddress1
+		'12 RETAIL ROAD', -- CustomerAddress2
+		'HULL', -- CustomerCity
+		'HUMBERSIDE', -- CustomerState
+		'HU1 3UT', -- CustomerZip
+		'GBR',  -- CustomerCountry
+		'01997', -- CustomerPhone 
+		'682678', -- CustomerFax
+		'01997', -- ContactInfo
+		'682178', -- ContactInfo2
+		'J. H. Blyton', -- CustomerSpecialInstruction
+		NULL, -- CustomerAuditPct
+		NULL, -- CustomerAuditFrequency
+		'NL0', --PickSection
+		'1', -- Warehouse
+		'LQ', -- LocationAisle
+		'018', -- LocationBay
+		'B', -- LocationLevel
+		'03', -- LocationSlot
+		'11789', -- LocationCheckString
+		'1', -- LocationSequenceNumber
+		'000000000005002700', -- ProductCode
+		'ZAK 58X100CM GRIJS (ROL 25ST)', -- ProductDescription    
+		'000000000005002700', -- ProductName  
+		'PK', -- UnitOfMeasure
+		'0.2034', -- ProductCube
+		'0.6367', -- ProductWeight
+		'0', -- BaseProductFlag
+		NULL, --  BaseProductThreshold
+		NULL, -- WeightMin
+		NULL, -- WeightMax
+		NULL, -- WeightEMin
+		NULL, -- WeightEMax
+		NULL, -- TargetWeight
+		NULL, -- CatchWeightFlag
+		NULL,  -- EnforceExpDateRangeFlag
+		NULL, -- ExpDateFormat
+		NULL, -- DaysToExpiration
+		0, -- LotNumberCapture
+		0, -- UPCFlag
+		NULL, -- UPCCheckFrequency
+		0.04, -- ProductPrice
+		0, -- EnforceCatchWeightRangeFlag
+		0, -- CaptureSerialNumber
+		NULL, -- ProductAuditPct
+		NULL, -- ProductSpecialInstruction
+		NULL, -- ProductImageUrl
+		'502/0000029485/0000004601/00', -- Invoice
+		NULL,  -- AddOnFlag
+		1, -- Line Number
+		10, -- QtyOrdered
+		0, -- CatchWeightAtPickFlag
+		NULL, -- ToLocation
+		NULL, -- ToLocationType
+		0, -- ToLocationCheckString
+		35, -- Label
+		NULL, -- FromLocationType
+		NULL, -- ResponseType
+		NULL, -- PickSpecialInstruction
+		NULL, -- LotNumber
+		'02', -- WorkTypeCode
+		NULL, -- UPC1
+		NULL, -- UPC2
+		NULL, -- UPC3
+		NULL,-- ErrorReasonCode
+		'PCE', --BaseUOM
+		1, -- NumContainerType1
+		0, -- NumContainerType2
+		0, -- NumContainerType3,
+		'RIVAS-ZORG', -- StagingLocation 
+		100); -- BaseUOMQuantity
+
+
+--- RECORD 2
+INSERT INTO [HospitalLogistics].[Import].[Picks]
+([ImportID],[RowLineNumber] ,[ColumnValidationStatusID],[ImportAction],[Created],[Updated],[RecordID],[Route],[Stop],[ShipDate],[DispatchTime],[Assignment],[CustomerNumber],[CustomerName],[CustomerDescription],[CustomerAddress1],[CustomerAddress2],[CustomerCity],[CustomerState]
+,[CustomerZip],[CustomerCountry],[CustomerPhone],[CustomerFax],[ContactInfo],[ContactInfo2],[CustomerSpecialInstruction],[CustomerAuditPct],[CustomerAuditFrequency],[PickSection],[Warehouse],[LocationAisle],[LocationBay],[LocationLevel]
+,[LocationSlot],[LocationCheckString],[LocationSequenceNumber],[ProductCode],[ProductDescription],[ProductName],[UnitOfMeasure],[ProductCube],[ProductWeight],[BaseProductFlag],[BaseProductThreshold],[WeightMin]
+,[WeightMax],[WeightEMin],[WeightEMax],[TargetWeight],[CatchWeightFlag],[EnforceExpDateRangeFlag],[ExpDateFormat],[DaysToExpiration],[LotNumberCapture],[UPCFlag],[UPCCheckFrequency],[ProductPrice],[EnforceCatchWeightRangeFlag]
+,[CaptureSerialNumber],[ProductAuditPct],[ProductSpecialInstruction],[ProductImageUrl],[Invoice],[AddOnFlag],[LineNumber],[QuantityOrdered],[CatchWeightAtPickFlag],[ToLocation],[ToLocationType],[ToLocationCheckString]
+,[Label],[FromLocationType],[ResponseType],[PickSpecialInstruction],[LotNumber],[WorkTypeCode],[UPC1],[UPC2],[UPC3],[ErrorReasonCode],[BaseUOM],[NumContainerType1],[NumContainerType2],[NumContainerType3],[StagingLocation],[BaseUOMQuantity])
+	 VALUES
+           (
+		1000000, -- ImportID  (Markers for update later)
+		2, -- RowLineNumber
+		1, -- ColumnValidationStatusID
+		'X', -- ImportAction
+		current_timestamp, -- Created
+		current_timestamp, -- Updated
+		'2', -- RecordID
+		'1', -- Route
+		'1', -- Stop
+		CONVERT (VARCHAR(8), SYSDATETIME(), 112), -- ShipDate
+		REPLACE(CONVERT (VARCHAR(8), SYSDATETIME(), 114),':',''), -- DispatchTime
+		'11111', -- Assignment
+		'0001000857', -- CustomerNumber
+		'R419010 -BZ - OK Algemeen', -- CustomerName
+		'R419010 -BZ - OK Algemeen', -- CustomerDescription
+		'RETAIL HOUSE', -- CustomerAddress1
+		'12 RETAIL ROAD', -- CustomerAddress2
+		'HULL', -- CustomerCity
+		'HUMBERSIDE', -- CustomerState
+		'HU1 3UT', -- CustomerZip
+		'GBR',  -- CustomerCountry
+		'01997', -- CustomerPhone 
+		'682678', -- CustomerFax
+		'01997', -- ContactInfo
+		'682178', -- ContactInfo2
+		'J. H. Blyton', -- CustomerSpecialInstruction
+		NULL, -- CustomerAuditPct
+		NULL, -- CustomerAuditFrequency
+		'NL0', --PickSection
+		'1', -- Warehouse
+		'LQ', -- LocationAisle
+		'032', -- LocationBay
+		'C', -- LocationLevel
+		'04', -- LocationSlot
+		'11789', -- LocationCheckString
+		'2', -- LocationSequenceNumber
+		'000000000005002701', -- ProductCode
+		'ZAK 58X100CM GRIJS (ROL 25ST)', -- ProductDescription    
+		'000000000005002701', -- ProductName  
+		'PK', -- UnitOfMeasure
+		'0.2034', -- ProductCube
+		'0.6367', -- ProductWeight
+		'0', -- BaseProductFlag
+		NULL, --  BaseProductThreshold
+		NULL, -- WeightMin
+		NULL, -- WeightMax
+		NULL, -- WeightEMin
+		NULL, -- WeightEMax
+		NULL, -- TargetWeight
+		NULL, -- CatchWeightFlag
+		NULL,  -- EnforceExpDateRangeFlag
+		NULL, -- ExpDateFormat
+		NULL, -- DaysToExpiration
+		0, -- LotNumberCapture
+		0, -- UPCFlag
+		NULL, -- UPCCheckFrequency
+		0.04, -- ProductPrice
+		0, -- EnforceCatchWeightRangeFlag
+		0, -- CaptureSerialNumber
+		NULL, -- ProductAuditPct
+		NULL, -- ProductSpecialInstruction
+		NULL, -- ProductImageUrl
+		'502/0000029485/0000004601/00', -- Invoice
+		NULL,  -- AddOnFlag
+		2, -- Line Number
+		14, -- QtyOrdered
+		0, -- CatchWeightAtPickFlag
+		NULL, -- ToLocation
+		NULL, -- ToLocationType
+		0, -- ToLocationCheckString
+		35, -- Label
+		NULL, -- FromLocationType
+		NULL, -- ResponseType
+		NULL, -- PickSpecialInstruction
+		NULL, -- LotNumber
+		'02', -- WorkTypeCode
+		NULL, -- UPC1
+		NULL, -- UPC2
+		NULL, -- UPC3
+		NULL,-- ErrorReasonCode
+		'PCE', --BaseUOM
+		1, -- NumContainerType1
+		0, -- NumContainerType2
+		0, -- NumContainerType3,
+		'RIVAS-ZORG', -- StagingLocation 
+		100); -- BaseUOMQuantity
+
+--- RECORD 3
+INSERT INTO [HospitalLogistics].[Import].[Picks]
+([ImportID],[RowLineNumber] ,[ColumnValidationStatusID],[ImportAction],[Created],[Updated],[RecordID],[Route],[Stop],[ShipDate],[DispatchTime],[Assignment],[CustomerNumber],[CustomerName],[CustomerDescription],[CustomerAddress1],[CustomerAddress2],[CustomerCity],[CustomerState]
+,[CustomerZip],[CustomerCountry],[CustomerPhone],[CustomerFax],[ContactInfo],[ContactInfo2],[CustomerSpecialInstruction],[CustomerAuditPct],[CustomerAuditFrequency],[PickSection],[Warehouse],[LocationAisle],[LocationBay],[LocationLevel]
+,[LocationSlot],[LocationCheckString],[LocationSequenceNumber],[ProductCode],[ProductDescription],[ProductName],[UnitOfMeasure],[ProductCube],[ProductWeight],[BaseProductFlag],[BaseProductThreshold],[WeightMin]
+,[WeightMax],[WeightEMin],[WeightEMax],[TargetWeight],[CatchWeightFlag],[EnforceExpDateRangeFlag],[ExpDateFormat],[DaysToExpiration],[LotNumberCapture],[UPCFlag],[UPCCheckFrequency],[ProductPrice],[EnforceCatchWeightRangeFlag]
+,[CaptureSerialNumber],[ProductAuditPct],[ProductSpecialInstruction],[ProductImageUrl],[Invoice],[AddOnFlag],[LineNumber],[QuantityOrdered],[CatchWeightAtPickFlag],[ToLocation],[ToLocationType],[ToLocationCheckString]
+,[Label],[FromLocationType],[ResponseType],[PickSpecialInstruction],[LotNumber],[WorkTypeCode],[UPC1],[UPC2],[UPC3],[ErrorReasonCode],[BaseUOM],[NumContainerType1],[NumContainerType2],[NumContainerType3],[StagingLocation],[BaseUOMQuantity])
+	 VALUES
+           (
+		1000000, -- ImportID  (Markers for update later)
+		3, -- RowLineNumber
+		1, -- ColumnValidationStatusID
+		'X', -- ImportAction
+		current_timestamp, -- Created
+		current_timestamp, -- Updated
+		'3', -- RecordID
+		'1', -- Route
+		'1', -- Stop
+		CONVERT (VARCHAR(8), SYSDATETIME(), 112), -- ShipDate
+		REPLACE(CONVERT (VARCHAR(8), SYSDATETIME(), 114),':',''), -- DispatchTime
+		'11111', -- Assignment
+		'0001000857', -- CustomerNumber
+		'R419010 -BZ - OK Algemeen', -- CustomerName
+		'R419010 -BZ - OK Algemeen', -- CustomerDescription
+		'RETAIL HOUSE', -- CustomerAddress1
+		'12 RETAIL ROAD', -- CustomerAddress2
+		'HULL', -- CustomerCity
+		'HUMBERSIDE', -- CustomerState
+		'HU1 3UT', -- CustomerZip
+		'GBR',  -- CustomerCountry
+		'01997', -- CustomerPhone 
+		'682678', -- CustomerFax
+		'01997', -- ContactInfo
+		'682178', -- ContactInfo2
+		'J. H. Blyton', -- CustomerSpecialInstruction
+		NULL, -- CustomerAuditPct
+		NULL, -- CustomerAuditFrequency
+		'NL0', --PickSection
+		'1', -- Warehouse
+		'LW', -- LocationAisle
+		'122', -- LocationBay
+		'A', -- LocationLevel
+		'01', -- LocationSlot
+		'11789', -- LocationCheckString
+		'4', -- LocationSequenceNumber
+		'000000000005002701', -- ProductCode
+		'ZAK 58X100CM GRIJS (ROL 25ST)', -- ProductDescription    
+		'000000000005002701', -- ProductName  
+		'PK', -- UnitOfMeasure
+		'0.2034', -- ProductCube
+		'0.6367', -- ProductWeight
+		'0', -- BaseProductFlag
+		NULL, --  BaseProductThreshold
+		NULL, -- WeightMin
+		NULL, -- WeightMax
+		NULL, -- WeightEMin
+		NULL, -- WeightEMax
+		NULL, -- TargetWeight
+		NULL, -- CatchWeightFlag
+		NULL,  -- EnforceExpDateRangeFlag
+		NULL, -- ExpDateFormat
+		NULL, -- DaysToExpiration
+		0, -- LotNumberCapture
+		0, -- UPCFlag
+		NULL, -- UPCCheckFrequency
+		0.04, -- ProductPrice
+		0, -- EnforceCatchWeightRangeFlag
+		0, -- CaptureSerialNumber
+		NULL, -- ProductAuditPct
+		NULL, -- ProductSpecialInstruction
+		NULL, -- ProductImageUrl
+		'502/0000029485/0000004601/00', -- Invoice
+		NULL,  -- AddOnFlag
+		3, -- Line Number
+		25, -- QtyOrdered
+		0, -- CatchWeightAtPickFlag
+		NULL, -- ToLocation
+		NULL, -- ToLocationType
+		0, -- ToLocationCheckString
+		35, -- Label
+		NULL, -- FromLocationType
+		NULL, -- ResponseType
+		NULL, -- PickSpecialInstruction
+		NULL, -- LotNumber
+		'02', -- WorkTypeCode
+		NULL, -- UPC1
+		NULL, -- UPC2
+		NULL, -- UPC3
+		NULL,-- ErrorReasonCode
+		'PCE', --BaseUOM
+		1, -- NumContainerType1
+		0, -- NumContainerType2
+		0, -- NumContainerType3,
+		'RIVAS-ZORG', -- StagingLocation 
+		100); -- BaseUOMQuantity
+
+--- RECORD 4
+INSERT INTO [HospitalLogistics].[Import].[Picks]
+([ImportID],[RowLineNumber] ,[ColumnValidationStatusID],[ImportAction],[Created],[Updated],[RecordID],[Route],[Stop],[ShipDate],[DispatchTime],[Assignment],[CustomerNumber],[CustomerName],[CustomerDescription],[CustomerAddress1],[CustomerAddress2],[CustomerCity],[CustomerState]
+,[CustomerZip],[CustomerCountry],[CustomerPhone],[CustomerFax],[ContactInfo],[ContactInfo2],[CustomerSpecialInstruction],[CustomerAuditPct],[CustomerAuditFrequency],[PickSection],[Warehouse],[LocationAisle],[LocationBay],[LocationLevel]
+,[LocationSlot],[LocationCheckString],[LocationSequenceNumber],[ProductCode],[ProductDescription],[ProductName],[UnitOfMeasure],[ProductCube],[ProductWeight],[BaseProductFlag],[BaseProductThreshold],[WeightMin]
+,[WeightMax],[WeightEMin],[WeightEMax],[TargetWeight],[CatchWeightFlag],[EnforceExpDateRangeFlag],[ExpDateFormat],[DaysToExpiration],[LotNumberCapture],[UPCFlag],[UPCCheckFrequency],[ProductPrice],[EnforceCatchWeightRangeFlag]
+,[CaptureSerialNumber],[ProductAuditPct],[ProductSpecialInstruction],[ProductImageUrl],[Invoice],[AddOnFlag],[LineNumber],[QuantityOrdered],[CatchWeightAtPickFlag],[ToLocation],[ToLocationType],[ToLocationCheckString]
+,[Label],[FromLocationType],[ResponseType],[PickSpecialInstruction],[LotNumber],[WorkTypeCode],[UPC1],[UPC2],[UPC3],[ErrorReasonCode],[BaseUOM],[NumContainerType1],[NumContainerType2],[NumContainerType3],[StagingLocation],[BaseUOMQuantity])
+	 VALUES
+           (
+		1000000, -- ImportID  (Markers for update later)
+		4, -- RowLineNumber
+		1, -- ColumnValidationStatusID
+		'X', -- ImportAction
+		current_timestamp, -- Created
+		current_timestamp, -- Updated
+		'4', -- RecordID
+		'1', -- Route
+		'1', -- Stop
+		CONVERT (VARCHAR(8), SYSDATETIME(), 112), -- ShipDate
+		REPLACE(CONVERT (VARCHAR(8), SYSDATETIME(), 114),':',''), -- DispatchTime
+		'11111', -- Assignment
+		'0001000857', -- CustomerNumber
+		'R419010 -BZ - OK Algemeen', -- CustomerName
+		'R419010 -BZ - OK Algemeen', -- CustomerDescription
+		'RETAIL HOUSE', -- CustomerAddress1
+		'12 RETAIL ROAD', -- CustomerAddress2
+		'HULL', -- CustomerCity
+		'HUMBERSIDE', -- CustomerState
+		'HU1 3UT', -- CustomerZip
+		'GBR',  -- CustomerCountry
+		'01997', -- CustomerPhone 
+		'682678', -- CustomerFax
+		'01997', -- ContactInfo
+		'682178', -- ContactInfo2
+		'J. H. Blyton', -- CustomerSpecialInstruction
+		NULL, -- CustomerAuditPct
+		NULL, -- CustomerAuditFrequency
+		'NL0', --PickSection
+		'1', -- Warehouse
+		'LT', -- LocationAisle
+		'054', -- LocationBay
+		'F', -- LocationLevel
+		'11', -- LocationSlot
+		'11789', -- LocationCheckString
+		'4', -- LocationSequenceNumber
+		'000000000005002701', -- ProductCode
+		'ZAK 58X100CM GRIJS (ROL 25ST)', -- ProductDescription    
+		'000000000005002701', -- ProductName  
+		'PK', -- UnitOfMeasure
+		'0.2034', -- ProductCube
+		'0.6367', -- ProductWeight
+		'0', -- BaseProductFlag
+		NULL, --  BaseProductThreshold
+		NULL, -- WeightMin
+		NULL, -- WeightMax
+		NULL, -- WeightEMin
+		NULL, -- WeightEMax
+		NULL, -- TargetWeight
+		NULL, -- CatchWeightFlag
+		NULL,  -- EnforceExpDateRangeFlag
+		NULL, -- ExpDateFormat
+		NULL, -- DaysToExpiration
+		0, -- LotNumberCapture
+		0, -- UPCFlag
+		NULL, -- UPCCheckFrequency
+		0.04, -- ProductPrice
+		0, -- EnforceCatchWeightRangeFlag
+		0, -- CaptureSerialNumber
+		NULL, -- ProductAuditPct
+		NULL, -- ProductSpecialInstruction
+		NULL, -- ProductImageUrl
+		'502/0000029485/0000004601/00', -- Invoice
+		NULL,  -- AddOnFlag
+		4, -- Line Number
+		45, -- QtyOrdered
+		0, -- CatchWeightAtPickFlag
+		NULL, -- ToLocation
+		NULL, -- ToLocationType
+		0, -- ToLocationCheckString
+		35, -- Label
+		NULL, -- FromLocationType
+		NULL, -- ResponseType
+		NULL, -- PickSpecialInstruction
+		NULL, -- LotNumber
+		'02', -- WorkTypeCode
+		NULL, -- UPC1
+		NULL, -- UPC2
+		NULL, -- UPC3
+		NULL,-- ErrorReasonCode
+		'PCE', --BaseUOM
+		1, -- NumContainerType1
+		0, -- NumContainerType2
+		0, -- NumContainerType3,
+		'RIVAS-ZORG', -- StagingLocation 
+		100); -- BaseUOMQuantity
+
+		
+--- RECORD 5
+INSERT INTO [HospitalLogistics].[Import].[Picks]
+([ImportID],[RowLineNumber] ,[ColumnValidationStatusID],[ImportAction],[Created],[Updated],[RecordID],[Route],[Stop],[ShipDate],[DispatchTime],[Assignment],[CustomerNumber],[CustomerName],[CustomerDescription],[CustomerAddress1],[CustomerAddress2],[CustomerCity],[CustomerState]
+,[CustomerZip],[CustomerCountry],[CustomerPhone],[CustomerFax],[ContactInfo],[ContactInfo2],[CustomerSpecialInstruction],[CustomerAuditPct],[CustomerAuditFrequency],[PickSection],[Warehouse],[LocationAisle],[LocationBay],[LocationLevel]
+,[LocationSlot],[LocationCheckString],[LocationSequenceNumber],[ProductCode],[ProductDescription],[ProductName],[UnitOfMeasure],[ProductCube],[ProductWeight],[BaseProductFlag],[BaseProductThreshold],[WeightMin]
+,[WeightMax],[WeightEMin],[WeightEMax],[TargetWeight],[CatchWeightFlag],[EnforceExpDateRangeFlag],[ExpDateFormat],[DaysToExpiration],[LotNumberCapture],[UPCFlag],[UPCCheckFrequency],[ProductPrice],[EnforceCatchWeightRangeFlag]
+,[CaptureSerialNumber],[ProductAuditPct],[ProductSpecialInstruction],[ProductImageUrl],[Invoice],[AddOnFlag],[LineNumber],[QuantityOrdered],[CatchWeightAtPickFlag],[ToLocation],[ToLocationType],[ToLocationCheckString]
+,[Label],[FromLocationType],[ResponseType],[PickSpecialInstruction],[LotNumber],[WorkTypeCode],[UPC1],[UPC2],[UPC3],[ErrorReasonCode],[BaseUOM],[NumContainerType1],[NumContainerType2],[NumContainerType3],[StagingLocation],[BaseUOMQuantity])
+	 VALUES
+           (
+		1000000, -- ImportID  (Markers for update later)
+		5, -- RowLineNumber
+		1, -- ColumnValidationStatusID
+		'X', -- ImportAction
+		current_timestamp, -- Created
+		current_timestamp, -- Updated
+		'5', -- RecordID
+		'1', -- Route
+		'1', -- Stop
+		CONVERT (VARCHAR(8), SYSDATETIME(), 112), -- ShipDate
+		REPLACE(CONVERT (VARCHAR(8), SYSDATETIME(), 114),':',''), -- DispatchTime
+		'11111', -- Assignment
+		'0001000857', -- CustomerNumber
+		'R419010 -BZ - OK Algemeen', -- CustomerName
+		'R419010 -BZ - OK Algemeen', -- CustomerDescription
+		'RETAIL HOUSE', -- CustomerAddress1
+		'12 RETAIL ROAD', -- CustomerAddress2
+		'HULL', -- CustomerCity
+		'HUMBERSIDE', -- CustomerState
+		'HU1 3UT', -- CustomerZip
+		'GBR',  -- CustomerCountry
+		'01997', -- CustomerPhone 
+		'682678', -- CustomerFax
+		'01997', -- ContactInfo
+		'682178', -- ContactInfo2
+		'J. H. Blyton', -- CustomerSpecialInstruction
+		NULL, -- CustomerAuditPct
+		NULL, -- CustomerAuditFrequency
+		'NL0', --PickSection
+		'1', -- Warehouse
+		'LG', -- LocationAisle
+		'002', -- LocationBay
+		'G', -- LocationLevel
+		'05', -- LocationSlot
+		'11789', -- LocationCheckString
+		'5', -- LocationSequenceNumber
+		'000000000005002701', -- ProductCode
+		'ZAK 58X100CM GRIJS (ROL 25ST)', -- ProductDescription    
+		'000000000005002701', -- ProductName  
+		'PK', -- UnitOfMeasure
+		'0.2034', -- ProductCube
+		'0.6367', -- ProductWeight
+		'0', -- BaseProductFlag
+		NULL, --  BaseProductThreshold
+		NULL, -- WeightMin
+		NULL, -- WeightMax
+		NULL, -- WeightEMin
+		NULL, -- WeightEMax
+		NULL, -- TargetWeight
+		NULL, -- CatchWeightFlag
+		NULL,  -- EnforceExpDateRangeFlag
+		NULL, -- ExpDateFormat
+		NULL, -- DaysToExpiration
+		0, -- LotNumberCapture
+		0, -- UPCFlag
+		NULL, -- UPCCheckFrequency
+		0.04, -- ProductPrice
+		0, -- EnforceCatchWeightRangeFlag
+		0, -- CaptureSerialNumber
+		NULL, -- ProductAuditPct
+		NULL, -- ProductSpecialInstruction
+		NULL, -- ProductImageUrl
+		'502/0000029485/0000004601/00', -- Invoice
+		NULL,  -- AddOnFlag
+		5, -- Line Number
+		50, -- QtyOrdered
+		0, -- CatchWeightAtPickFlag
+		NULL, -- ToLocation
+		NULL, -- ToLocationType
+		0, -- ToLocationCheckString
+		35, -- Label
+		NULL, -- FromLocationType
+		NULL, -- ResponseType
+		NULL, -- PickSpecialInstruction
+		NULL, -- LotNumber
+		'02', -- WorkTypeCode
+		NULL, -- UPC1
+		NULL, -- UPC2
+		NULL, -- UPC3
+		NULL,-- ErrorReasonCode
+		'PCE', --BaseUOM
+		1, -- NumContainerType1
+		0, -- NumContainerType2
+		0, -- NumContainerType3,
+		'RIVAS-ZORG', -- StagingLocation 
+		100); -- BaseUOMQuantity
+-- END INSERTING
+		
+		
+		UPDATE import.Picks
+		SET ImportID = (SELECT ImportID FROM import.imports WHERE Filename ='1000000')
+		WHERE ImportID = 1000000
+		
+		UPDATE  import.Imports
+		SET Filename = NULL,
+		Status = 'Available'
+		WHERE Filename = '1000000'
+
+
+
+-- Use these truncate statement to clean out the staging tables before running 
+--TRUNCATE TABLE Staging.Assignments
+--TRUNCATE TABLE Staging.Containers
+--TRUNCATE TABLE Staging.Customers
+--TRUNCATE TABLE Staging.Orders
+--TRUNCATE TABLE Staging.Picks
+--TRUNCATE TABLE Staging.Products
+--TRUNCATE TABLE Staging.RoutesLoads
+--TRUNCATE TABLE Staging.Stops
+--TRUNCATE TABLE Staging.Waves
+--TRUNCATE TABLE Staging.WorkAreas
+
+---- Replace the Import Identifier with your updated number
+--DECLARE @ImportIdentifier BIGINT = 1
+---- Takes the data out of Import.Picks table and updates the Staging tables
+--EXEC Import.PopulateConsolidatedPicksStagingData @ImportID = @ImportIdentifier
+---- Takes the staged data and update the production tables
+--EXEC Import.Staging @ImportID = @ImportIdentifier
+
+----select * from dbo.assignments
+
+
+
+

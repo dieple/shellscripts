@@ -1,0 +1,6 @@
+git checkout develop
+git branch -D <feature/PHX-xxx>
+git fetch
+git rebase origin/develop
+git cheeckout feature/PHX-xxxx
+git merge origin/develop

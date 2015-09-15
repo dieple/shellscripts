@@ -1,0 +1,100 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_object_drop_like
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <pattern_to_match>
+#
+# Description      :	drop all tables and views named like %\$1%
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+VARS(){
+
+TMPFILE=/tmp/DB_object_drop_like.$$.tmp
+TMPFILE2=/tmp/DB_object_drop_like1.$$.tmp
+TABFILE=/tmp/DB_object_drop_like_2.$$.tmp
+VIEWFILE=/tmp/DB_object_drop_like_3.$$.tmp
+USERNAME=$(${LOGNAME} | tr '[a-z]' '[A-Z]')
+PATTERN=$(echo $1 | tr '[a-z]' '[A-Z]')
+
+}
+
+USAGE(){
+cat <<!
+$(basename $0) - drop all tables and views named like %\$1% 
+
+Usage: $(basename $0) <pattern_to_match>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+LIST_INFO(){
+echo "Only looking for tables owned by: $USERNAME."
+echo "Dropping all tables and views which are like $1..."
+
+${HOME}/bin/DB_LIST_TABLES | grep "^$USERNAME." |\
+cut -d'.' -f2 | grep ${PATTERN} > ${TABFILE}
+
+${HOME}/bin/DB_LIST_VIEWS | grep "^$USERNAME." |\
+cut -d'.' -f2 | grep ${PATTERN} > ${VIEWFILE}
+
+if [ -s ${TABFILE} ]
+then
+    echo "Attempting to drop the following tables:"
+    cat ${TABFILE}
+fi
+if [ -s ${VIEWFILE} ]
+then
+    echo "Attempting to drop the following views:"
+    cat ${VIEWFILE}
+    echo ""
+fi
+}
+
+DROP_OBJECTS(){
+cat ${TABFILE} | sed -e 's/^/drop table /' -e 's/$/;/' > ${TMPFILE}
+cat ${VIEWFILE} | sed -e 's/^/drop view /' -e 's/$/;/' >> ${TMPFILE}
+cat ${TMPFILE} | ${HOME}/bin/db_run_query_pipe > ${TMPFILE2}
+}
+
+####
+# Main
+####
+
+VARS $1
+CHK_PARAM $1
+LIST_INFO
+DROP_OBJECTS
+
+echo "Complete. $(grep -c 'dropped.' ${TMPFILE2}) Tables/Views were dropped."
+echo "\nDatabase output:"
+cat ${TMPFILE2}
+echo "\nEnd of database output."
+
+rm -f ${TMPFILE} ${TMPFILE2} ${VIEWFILE} ${TABFILE}

@@ -1,0 +1,134 @@
+# =====================================================================
+#
+# Script Name : db_task_info
+#
+# Usage       : $0 -i | [-n -s]
+#    -i         TASKID - task identifier
+#    -n         TASK NAME - task name 
+#    -s         SOURCE SYSTEM - source system
+#
+# Description : Retrieves information about a registered task
+#               This script retrieves the task infomation on
+#               the scriptctl's database using the stored
+#               procedure au_task_info.
+#
+# Called by   : Script Ctl Application /
+#               Admin Tool /
+#               or can be run stand alone - see Usage
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   24-09-1999  Created
+# =====================================================================
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+USAGE="
+$0 - scriptctl utility - lists information about a task
+Version 1.0.0
+Usage: $0 -i | [-n -s]
+\t-i         TASKID - task identifier
+\t-n         TASK NAME - task name 
+\t-s         SOURCE SYSTEM - source system
+"
+
+function Usage {
+   if [[ -n $1 ]];
+   then
+      echo "$0: --illegal option -- $1"
+      echo "${USAGE}" >&2
+   else
+      echo "Error: Insufficient arguments"
+      echo "${USAGE}" >&2
+   fi
+
+   exit 1
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+while getopts "i:n:s:" option; 
+do
+   case "$option" in
+   i)  _TASKID="${OPTARG}";;
+   n)  _TASKNAME="${OPTARG}";;
+   s)  _SRCSYSTEM="${OPTARG}";;
+   *)  Usage $option;;
+   esac
+done
+
+# check for at least taskid #
+# or both taskname and      #
+# srcsystem                 #
+
+if [[ -z "$_TASKID" ]];
+then
+   if [[ -z "$_TASKNAME" ]] || 
+      [[ -z "$_SRCSYSTEM" ]];
+   then
+       Usage;
+   fi
+fi 
+
+
+#           # 
+# DBMS Pipe #
+#           #
+
+PROGSTATUS=`DB_run_query_pipe <<! 
+
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+DECLARE
+
+   p_debug              VARCHAR2(255); 
+   p_error              NUMBER(10); 
+   p_error_message      VARCHAR2(255); 
+ 
+   v_task_id            NUMBER(10) := '${_TASKID}'; 
+   v_task_name          VARCHAR2(50) := '${_TASKNAME}';
+   v_task_src_system    VARCHAR2(50) := '${_SRCSYSTEM}'; 
+   v_cur_script_id      NUMBER(10);
+   v_cur_script_status  VARCHAR2(1);
+   v_cur_script_dttm    VARCHAR2(30);
+   v_end_script_id      NUMBER(10);
+BEGIN
+
+   IF NOT pk_audit_lib.au_task_info(
+      v_task_id 
+     ,v_task_name
+     ,v_task_src_system
+     ,v_cur_script_id 
+     ,v_cur_script_status
+     ,v_cur_script_dttm 
+     ,v_end_script_id
+     ,p_debug    
+     ,p_error   
+     ,p_error_message)
+   THEN
+     dbms_output.put_line('-1');
+   ELSE
+     dbms_output.put_line('0'||'~'
+                          ||v_task_id||'~'
+                          ||v_task_name||'~'
+                          ||v_task_src_system||'~'
+                          ||v_cur_script_id||'~'    
+                          ||v_cur_script_status||'~'
+                          ||v_cur_script_dttm||'~' 
+                          ||v_end_script_id||'~'
+                         );
+   END IF;
+END;
+/
+!`
+
+echo $PROGSTATUS
+

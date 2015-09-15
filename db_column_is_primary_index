@@ -1,0 +1,116 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_column_is_primary_index
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <Table/View name> <Column name>
+#
+# Description      :	check if an index uses this column first
+#
+# Calls            :	db_run_query_pipe
+#			db_column_not_exists
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - check if an index uses this column first 
+
+Usage: $(basename $0) <Table/View name> <Column name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 2 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+VARS(){
+
+OBJECT_FULL_NAME=$(echo ${1} | tr '[a-z]' '[A-Z]')
+COLUMN_NAME=$(echo ${2} | tr '[a-z]' '[A-Z]')
+OBJECT_NAME=$(echo ${OBJECT_FULL_NAME} | sed 's/.*\.//')
+# this is owner based information
+OBJECT_OWNER=$(echo ${OBJECT_FULL_NAME} | sed 's/\..*//')
+
+}
+
+
+SELECT_INDEX(){
+
+INDEX_RETURN=`echo "\
+set pages 0;
+set feedback off;
+select '1'
+from ALL_IND_COLUMNS
+where TABLE_NAME = '${OBJECT_NAME}'
+and COLUMN_NAME = '${COLUMN_NAME}'
+and COLUMN_POSITION = 1
+; " | ${HOME}/bin/db_run_query_pipe`
+#echo ${INDEX_RETURN}
+}
+
+SELECT_OWNER(){
+
+INDEX_RETURN=`echo "\
+set pages 0;
+set feedback off;
+select '1'
+from ALL_IND_COLUMNS
+where OWNER = '${OBJECT_OWNER}'
+and TABLE_NAME = '${OBJECT_NAME}'
+and COLUMN_NAME = '${COLUMN_NAME}'
+and COLUMN_POSITION = 1
+; " | ${HOME}/bin/db_run_query_pipe`
+#echo ${INDEX_RETURN}
+}
+
+
+####
+# main 
+####
+
+CHK_PARAM $1 $2
+VARS $1 $2
+
+if ${HOME}/bin/db_column_not_exists ${OBJECT_FULL_NAME} ${COLUMN_NAME}
+then
+    echo "Database Column does not exist"
+    exit 1
+fi
+
+if [ "${OBJECT_NAME}" = "${OBJECT_FULL_NAME}" ]
+then
+    SELECT_INDEX
+else
+    SELECT_OWNER
+fi
+
+if [ x"${INDEX_RETURN}" = x"1" ]
+then
+    #echo "a primary index on ${1}(${2}) exists"
+    exit 0
+else #echo "a primary index on ${1}(${2}) does not exist"
+    exit 1
+fi
+
+#### END ####

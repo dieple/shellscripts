@@ -1,0 +1,42 @@
+#!/bin/sh
+
+echo ""
+echo "Useful scripts..."
+echo ""
+echo "startall - start all processes running for area (and show errors)"
+echo "stopall - stop all processes running for area (and purge logfiles)"
+echo "reload - reload en_gb language text"
+echo "doanupdate - update development area"
+echo "runreleasescript - run release script (edit to set build options)"
+echo "moreserverlog - more app server log (uses vi as more is rubbish on linux)"
+echo "tailserverlog - tail app server log"
+echo "checkerrorlogs - check error logs"
+echo "backupcvsfiles - backup added/modified files"
+echo "getmessage - searches for message in en_gb.t and errors.h"
+echo ""
+
+if [ "$1" = "-?" ]
+then
+	cd $DCS/tools/vmscripts/lis
+
+	for FILE in `ls | grep -v CVS`
+	do
+		echo "Checking $FILE up to date..."
+		diff $FILE $HOME/bin/.
+	done
+
+	echo ""
+
+elif [ "$1" = "-c" ]
+then
+	cd $DCS/tools/vmscripts/lis
+
+	for FILE in `ls | grep -v CVS`
+	do
+		echo "Keeping $FILE up to date..."
+		cp $FILE $HOME/bin/.
+	done
+
+	echo ""
+fi
+

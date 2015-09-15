@@ -1,0 +1,17 @@
+#!/bin/bash
+
+WMS_HOME="/home/lucas/workspace/alps/lucasware/lucas-wms"
+# build
+cd $WMS_HOME
+mvn clean install -f wms-parent/pom.xml
+mvn clean install -f wms-build/pom.xml
+
+
+# run test
+cd $WMS_HOME
+mvn clean install -Pdev,alltests -f wms-build/pom.xml
+
+# run app
+cd $WMS_HOME
+mvn clean install -f wms-parent/pom.xml -Palltests,loc
+mvn jetty:run -Palltests,loc -f wms-web/pom.xml

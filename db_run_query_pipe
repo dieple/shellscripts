@@ -1,0 +1,64 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_run_query_pipe
+#
+# Author           :    DL
+#
+# Usage            :	<command> | db_run_query_pipe 
+#
+# Description      :    db_run_query_pipe (DB_run_query_pipe). Run a SQL command from stdin 
+#
+# Calls            :    None
+#
+# Called By        :    None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+
+	cat <<-!
+
+	$(basename $0)  - Runs a SQL COMMAND from stdin
+
+	Usage: <command> | db_run_query_pipe
+
+	e.g    cat sql_file.sql | db_run_query_pipe
+
+	or     cat <<-END_SQL | db_run_query_pipe
+	       Your SQL statements
+               go here
+	END_SQL
+
+	!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+   echo "Incorrect number of arguments" 2>&1
+   USAGE
+   exit 1
+fi
+}
+
+####
+# Main
+####
+
+CHK_PARAM
+# DB_LOGIN is exported by .profile, i.e. DB_LOGIN=$ORACLE_LOGIN/$ORACLE_PASSWD
+sqlplus -s ${DB_LOGIN}   
+
+### End  ###

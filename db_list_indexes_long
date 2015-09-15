@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_list_indexes2
+#
+# Author           :	DL
+#
+# Usage            :	db_list_indexes2 
+#
+# Description      :	list all indexes (long version) this DB_LOGIN
+#			has access to
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - list all indexes (long version) this DB_LOGIN 
+has access to 
+
+Usage: $(basename $0)
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+SELECT_INDEXES(){
+
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set lines 1000;
+set feedback off;
+select TABLE_OWNER||'.'||TABLE_NAME||','||OWNER||'.'||INDEX_NAME||','||UNIQUENESS||','||TABLESPACE_NAME
+from all_indexes
+where owner <> 'SYS' and owner <> 'SYSTEM'
+order by TABLE_NAME;
+!
+}
+
+####
+# Main
+####
+
+CHK_PARAM
+SELECT_INDEXES
+
+#### END ####

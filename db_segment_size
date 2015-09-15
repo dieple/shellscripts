@@ -1,0 +1,78 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_segment_size
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <Segment name>
+#
+# Description      :	display the size of a segment in bytes
+#			from USER_TABLES table. 
+#			Exit 1 if not found, exit 0 if found.
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - display the size of a segment in bytes 
+from USER_TABLES table. Exit 1 if not found, exit 0 if found. 
+
+Usage: $(basename $0) <Segment name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+GET_BYTES(){
+
+SEGMENT_NAME=$(echo ${1} | tr '[a-z]' '[A-Z]')
+BYTES=`echo "\
+set pages 0;
+set feedback off;
+select BYTES 
+from DBA_SEGMENTS
+where SEGMENT_NAME = '${SEGMENT_NAME}';
+" | ${HOME}/bin/db_run_query_pipe`
+
+if [ -n "${BYTES}" ]
+then
+    #echo table ${1} exists
+    echo "${BYTES}"
+    exit 0
+else
+    #echo table ${1} does not exist
+    exit 1
+fi
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1
+GET_BYTES $1
+
+#### END ####

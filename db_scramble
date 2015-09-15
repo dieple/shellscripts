@@ -1,0 +1,140 @@
+# =====================================================================
+#
+# Script Name : db_scramble
+#
+# Usage       : $0
+#
+# Description : 
+#
+# Called by   : 
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   05-Oct-2012 Initial Version
+# =====================================================================
+
+PROG="`basename $0`"
+_DECRYPT="FALSE"
+_ENCRYPT="FALSE"
+_INDATA=""
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+usage()
+{
+USAGE="
+Version 1.0.0
+Usage: $0 -i | [-n -s]
+\t-d         DECRYPT - perform decryption
+\t-e         ENCRYPT - perform encryption 
+\t-s         INPUT_DATA - input data to perform
+"
+	echo "${USAGE}" >&2
+	exit 1
+}
+
+
+initialise()
+{
+        if [ "$DCS_ORACLESERVER" != "TRUE" ]
+        then
+                echo ""
+                echo "$PROG: Error - This script can only be run on a server with an oracle database !"
+                echo ""
+                exit 1
+        fi
+
+	databaseup
+
+	if [ "$?" != "1" ]
+	then
+		echo ""
+		echo "$PROG: The database is not running !"
+		echo ""
+		exit 1
+	fi
+
+}
+
+
+encrypt()
+{
+PROGSTATUS=`db_run_query_pipe <<-! 
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+DECLARE
+	v_enc 			VARCHAR2(255);
+BEGIN
+	v_enc := libldap.encrypt('$_INDATA');
+	dbms_output.put_line('v_enc = '|| v_enc);
+END;
+/
+!`
+
+
+echo $PROGSTATUS
+}
+
+decrypt()
+{
+PROGSTATUS=`db_run_query_pipe <<-! 
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+DECLARE
+
+	v_dec			VARCHAR2 (255);
+BEGIN
+	v_dec := libldap.decrypt('$_INDATA');
+	dbms_output.put_line('v_dec = ' || v_dec);
+END;
+/
+!`
+
+
+echo $PROGSTATUS
+}
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+initialise
+
+while getopts "des:?" 2> /dev/null ARG
+do
+	case $ARG in
+
+		d)	_DECRYPT="TRUE";;
+
+		e)	_ENCRYPT="TRUE";;
+
+		s)	_INDATA=$OPTARG;;
+
+		?)	usage
+			exit 1;;
+	esac	
+done
+
+
+if [ -z "$_INDATA" ]
+then
+       usage;
+fi 
+
+if [ "$_ENCRYPT" = "TRUE" ]
+then
+	encrypt
+else
+	decrypt
+fi
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# E N D
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

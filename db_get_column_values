@@ -1,0 +1,76 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_get_column_values
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <$1- Table/View name> 
+#			<$2- Column name> <$3- Where clause>
+#
+# Description      :	retrieve all values from table ${1},
+#			column ${2} under ${3} conditions
+#
+# Calls            :	db_object_not_exists
+#			db_run_query_pipe
+#
+# Called By        :	None
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+USAGE(){
+cat <<!
+$(basename $0) - retrieve all values from table ${1},
+column ${2} under ${3} conditions 
+
+Usage: $(basename $0) <Table/View name> <Column name> <Where clause>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 3 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_EXISTS(){
+
+if ${HOME}/bin/db_object_not_exists ${1}
+then
+    echo "Error: Specified Table/View  ${1} does not exist or insufficient priviledges" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+GET_COLUMN(){
+
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select distinct ${2} from ${1} where ${3};
+!
+}
+
+
+####
+# Main
+####
+
+CHK_PARAM $1 $2 $3
+CHK_EXISTS $1
+GET_COLUMN $1 $2 $3
+
+#### END ####

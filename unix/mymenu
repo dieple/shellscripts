@@ -1,0 +1,85 @@
+trap 'print "\n\nEscape or CTL-C not permitted whilst using this menu!";sleep 2' INT TERM
+
+##
+# Vars
+##
+
+RESET=$(tput rmso)
+BOLD=$(tput smso)
+BLINK=$(tput blink)
+MYDATE=$(date "+%d-%m-%Y")
+HOST=$(uname -n)
+NAME="DRAGON LEE"
+
+
+##
+# Main
+##
+
+while true
+do 
+
+clear 
+cat <<!
+
+=================================================================================================================================
+COMMANDER : $BLINK $NAME $RESET	     ||		STAR SHIP : $BLINK THE INVINCIBLE$RESET	     ||	            STAR DATE : $BLINK $MYDATE $RESET     ||
+=================================================================================================================================
+
+         $BLINK#3 VOYAGER - STAR TREKING ACROSS THE UNIVERSE $RESET
+         $BLINK#4 VOYAGER - STAR TREKING ACROSS THE UNIVERSE $RESET
+
+            $BLINK#3 IT'S LIFE JIM BUT NOT AS WE KNOW IT! $RESET
+            $BLINK#4 IT'S LIFE JIM BUT NOT AS WE KNOW IT! $RESET
+
+
+
+	 1 . Run SQL scripts 							 	2.  Execute Korn Shell 
+	 3 . Lock The Terminal
+
+
+
+!
+print "	                            	X ............ eXit\n"           
+
+print "	                         	PLEASE ENTER YOUR CHOICE :  \c" 
+
+
+ANS=""
+CONT=""
+
+read ANS
+ANS=$(print $ANS | tr "[a-z]" "[A-Z]")
+
+  case $ANS in 
+
+	      1) clear
+                 /home/dieple/bin/run
+		 print "             Press [ Return ] to continue ......"
+                 read CONT
+		 ;;
+
+              2) clear
+		 print
+		 /usr/bin/ksh
+                 print
+		 print "             Press [ Return ] to continue......"
+	         read CONT
+	         ;;
+
+	       x|X|q|Q) clear
+			print "\n\nWarning - Exiting this menu will loose status of jobs currently executed"
+			print "If a shell is required then select option 2"
+			print "Continue With Exit ? (Y/N)  :\c"
+			read xval
+			if [ x"$xval" = x"Y" ] || [ x"$xval" = x"y" ]
+			then
+				print "Thank you."
+				print
+				exit 
+			fi
+			;;
+
+   esac
+done
+trap INT TERM

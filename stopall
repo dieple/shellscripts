@@ -1,0 +1,241 @@
+#!/bin/sh
+
+APACHESTATUS=""
+ORASTATUS=""
+WEBSTATUS=""
+APPSTATUS=""
+LISTENERSTATUS=""
+GATEWAY=""
+
+get_statuses()
+{
+	#
+	# Work out if Apache is up
+	#
+
+	APACHESTATUS=`pscmd -e | grep "httpd" | grep -v grep | grep -v sqldeveloper | grep -v Xvnc` >/dev/null
+
+	if [ "$APACHESTATUS" != "" ]
+	then
+		APACHESTATUS="UP"
+	else
+		APACHESTATUS="DOWN"
+	fi
+
+	#
+	# Work out if Oracle listener is up
+	#
+
+	lsnrctl status $ORACLE_SID >/dev/null
+
+	if [ $? = 0 ]
+	then
+		LISTENERSTATUS="UP"
+	else
+		LISTENERSTATUS="DOWN"
+	fi
+
+	lsnrctl status dg4msql >/dev/null
+
+	if [ $? = 0 ]
+	then
+		GATEWAY="UP"
+	else
+		GATEWAY="DOWN"
+	fi
+
+	#
+	# Work out if Oracle database is up
+	#
+
+	databaseup > /dev/null
+
+	if [ "$?" = "1" ]
+	then
+		ORASTATUS="UP"
+	else
+		ORASTATUS="DOWN"
+	fi
+
+	#
+	# Work out if Application is up
+	#
+
+	sia -u >/dev/null
+
+	if [ "$?" = "0" ]
+	then
+		APPSTATUS="UP"
+	else
+		APPSTATUS="DOWN"
+	fi
+
+	#
+	# Work out if JBoss application server is up
+	#
+
+	WEBSTATUS=`pscmd -e | grep "org.jboss.Main \-c $APPS_PART" | grep -v grep` >/dev/null
+
+	if [ "$WEBSTATUS" != "" ]
+	then
+		WEBSTATUS="UP"
+	else
+		WEBSTATUS="DOWN"
+	fi
+}
+
+#
+# Main
+#
+
+purgedblogs -p 7
+
+get_statuses
+
+if [ $WEBSTATUS = "UP" ]
+then
+	echo "Stopping JBoss application server..."
+
+	partitionctl -d >/dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo  "Failed to stop JBoss application server...abort"
+		exit 1
+	fi
+else
+	echo "JBoss application server is already stopped"
+fi
+
+if [ $APPSTATUS = "UP" ]
+then
+	echo "Stopping Application..."
+
+	appstop -y >/dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo  "Failed to stop Application...abort"
+		exit 1
+	fi
+else
+	echo "Application is already stopped"
+fi
+
+if [ $ORASTATUS = "UP" ]
+then
+	if [ -x "$ORACLE_HOME/bin/svrmgrl$EXE" ]
+	then
+		DBADMIN="svrmgrl$EXE"
+	else
+		DBADMIN="sqlplus /nolog"
+	fi
+
+	echo "Stopping Oracle database..."
+
+	$DBADMIN << ! > /dev/null 2>&1
+		connect $DCS_SYSINTERNAL as sysdba
+		shutdown immediate
+!
+
+	databaseup
+
+	if [ $? = 1 ]
+	then
+		echo  "Failed to stop Oracle database...abort"
+		exit 1
+	fi
+else
+	echo "Oracle database is already stopped"
+fi
+
+if [ $LISTENERSTATUS = "UP" ]
+then
+	echo  "Stopping Oracle listener..."
+
+	lsnrctl stop $ORACLE_SID > /dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo "Failed to stop Oracle listener...abort"
+		exit 1
+	fi
+else
+	echo "Oracle listener is already stopped"
+fi
+
+if [ $GATEWAY = "UP" ]
+then
+	echo  "Stopping Oracle gateway listener..."
+
+	lsnrctl stop dg4msql > /dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo "Failed to stop Oracle gateway listener...abort"
+		exit 1
+	fi
+else
+	echo "Oracle gateway listener is already stopped"
+fi
+
+if [ $APACHESTATUS = "UP" ]
+then
+	echo  "Stopping Apache..."
+
+	apachectl -d >/dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo "Failed to stop Apache...abort"
+		exit 1
+	fi
+else
+	echo "Apache is already stopped"
+fi
+
+echo ""
+echo "Purging log files..."
+echo ""
+
+PURGEDAYS="7"
+
+if [ -d "/tmp" ]
+then
+	sudo find /tmp \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+if [ -d "$APPS_HOME" ]
+then
+	sudo find $APPS_HOME -name server.log.* \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+if [ -d "$APACHE_HOME" ]
+then
+	mv $APACHE_HOME/logs/access_log $APACHE_HOME/logs/access_log.$$
+	mv $APACHE_HOME/logs/error_log $APACHE_HOME/logs/error_log.$$
+	sudo find $APACHE_HOME -name *_log.* \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+rm -f $HOME/nohup.out
+
+purgerdtlogs
+
+commpurge 7 7 7 7 7 7 7 << !
+y
+y
+y
+y
+y
+y
+y
+!
+
+rm -rf $HOME/oradiag_$LOGNAME
+

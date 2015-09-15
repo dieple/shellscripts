@@ -1,0 +1,79 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_which_table_space
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0} <Table name>
+#
+# Description      :	display the value of TABLESPACE_NAME column
+#                       from USER_TABLES table. 
+#                       Exit 1 if not found, exit 0 if found.
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     30-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - display the value of TABLESPACE_NAME column 
+from USER_TABLES table. Exit 1 if not found, exit 0 if found. 
+
+Usage: $(basename $0} <Table name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+GET_TABLESPACE(){
+
+TABLE_NAME=$(echo ${1} | tr '[a-z]' '[A-Z]')
+
+TABLESPACE_NAME=`echo "\
+set pages 0;
+set feedback off;
+select TABLESPACE_NAME
+from ALL_TABLES
+where TABLE_NAME = '${TABLE_NAME}';
+" | ${HOME}/bin/db_run_query_pipe`
+
+if [ -n "${TABLESPACE_NAME}" ]
+then
+    #echo table ${1} exists
+     echo "${TABLESPACE_NAME}"
+     exit 0
+fi
+
+#echo table ${1} does not exist
+exit 1
+}
+
+#### 
+# Main 
+####
+
+CHK_PARAM $1
+GET_TABLESPACE $1
+
+#### END ####

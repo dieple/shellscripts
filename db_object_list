@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_object_list
+#
+# Author           :	DL
+#
+# Usage            : 	db_object_list
+#
+# Description      :	$(basename $0) - list all tables, views and indexes
+#
+# Calls            :	db_list_synonyms
+#			db_list_tables
+#			db_list_views 
+#			db_list_indexes2
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+
+cat <<!
+$(basename $0) - list all tables, views and indexes 
+
+Usage: $(basename $0)
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+GET_LIST(){
+
+${HOME}/bin/db_list_synonyms | sed 's/$/		SYNONYM/'
+${HOME}/bin/db_list_tables | sed 's/$/		TABLE/'
+${HOME}/bin/db_list_views | sed 's/$/		VIEW/'
+${HOME}/bin/db_list_indexes2
+}
+
+####
+# Main
+####
+
+CHK_PARAM
+GET_LIST | sort
+
+#### END ####

@@ -1,0 +1,172 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_compare_column_names
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0)  <$1 - Source table/view> 
+#					<$2 - Destination table/view>
+#
+# Description      :	Compare 2 tables or views, and report on
+#			differences in layouts
+#
+# Calls            :	db_desc
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+# 
+# =====================================================================
+
+
+VARS(){
+
+SOURCE_TABLE=$(echo $1 | tr '[a-z]' '[A-Z]')
+DESTINATION_TABLE=$(echo $2 | tr '[a-z]' '[A-Z]')
+T_SOURCE=/tmp/$$.${LOGNAME}.source
+T_DEST=/tmp/$$.${LOGNAME}.dest
+T1=/tmp/$$.${LOGNAME}.tmp
+T2=/tmp/$$.${LOGNAME}.comp_1
+T3=/tmp/$$.${LOGNAME}.comp_2
+T4=/tmp/$$.${LOGNAME}.comp_3
+}
+
+USAGE(){
+cat <<!
+$(basename $0) - Compare 2 tables or views, and report on 
+differences in layouts 
+
+Usage: $(basename $0) <$1 - Source table/view> <$2 - Destination table/view>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 2 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+CHK_SOURCE(){
+
+# Verify OWNER.OBJECT_NAMEs is $1 and $2
+if ${HOME}/bin/db_desc ${SOURCE_TABLE} > ${T_SOURCE}
+then
+    echo "\c"
+else
+    rm -f ${T_SOURCE} ${T_DEST}
+    echo "Error: Table/view ${SOURCE_TABLE} does not exist or insufficient privileges" >&2
+    exit 1
+fi
+}
+
+CHK_DEST(){
+
+if ${HOME}/bin/db_desc ${DESTINATION_TABLE} > ${T_DEST}
+then
+    echo "\c"
+else
+    DESCRIBE=${MKI_HOME}/${ORACLE_SID}/templates/${DESTINATION_TABLE}.desc
+    if [ -r "${DESCRIBE}" ]
+    then
+        cp ${DESCRIBE} ${T_DEST}
+    else
+        rm -f ${T_SOURCE} ${T_DEST}
+	echo "Error: Table/view ${DESTINATION_TABLE} does not exist or insufficient privileges" >&2
+	exit 1
+    fi
+fi
+}
+
+READ_SOURCE(){
+
+while read S_COL_NAME S_COL_SIZE
+do
+   grep "^${S_COL_NAME}[ 	]" ${T_DEST} > ${T1}
+   read D_COL_NAME D_COL_SIZE < ${T1}
+   if [ -z "${D_COL_NAME}" ]
+   then
+      echo "\t${S_COL_NAME}\t\t\t${S_COL_SIZE}"
+      continue
+   fi
+   if [ "${S_COL_SIZE}" != "${D_COL_SIZE}" ]
+   then
+       echo "\tSOURCE:  ${S_COL_NAME}\t\t\t${S_COL_SIZE}\n\tDEST:    ${D_COL_NAME}\t\t\t${D_COL_SIZE}" >&2
+   fi
+done < ${T_SOURCE} > ${T2} 2> ${T3}
+}
+
+READ_DEST(){
+
+while read D_COL_NAME D_COL_SIZE
+do
+   grep "^${D_COL_NAME}[ 	]" ${T_SOURCE} >${T1}
+   read S_COL_NAME S_COL_SIZE <${T1}
+   if [ -z "${S_COL_NAME}" ]
+   then
+       echo "\t${D_COL_NAME}\t\t\t${D_COL_SIZE}" >&2
+   fi
+done <${T_DEST} 2> ${T4}
+}
+
+COMPARE(){
+
+echo "Comparison of ${SOURCE_TABLE} vs ${DESTINATION_TABLE}\n"
+
+if [ -s "${T2}" -a -s "${T3}" -a -s "${T4}" ]
+then
+    echo "\t Exactly Equal"
+fi
+
+echo "Columns diff in ${SOURCE_TABLE} vs ${DESTINATION_TABLE}:"
+if [ -s "${T3}" ]
+then
+    cat ${T3}
+else
+    echo "\t None"
+fi
+
+echo "Columns in ${SOURCE_TABLE} not in ${DESTINATION_TABLE}:"
+if [ -s "${T2}" ]
+then
+    cat ${T2}
+else
+    echo "\t None"
+fi
+
+echo "Columns in ${DESTINATION_TABLE} not in ${SOURCE_TABLE}:"
+if [ -s "${T4}" ]
+then
+    cat ${T4}
+else
+    echo "\t None"
+fi
+}
+
+
+####
+# main
+####
+
+VARS $1 $2
+CHK_PARAM $1 $2
+CHK_SOURCE
+CHK_DEST
+READ_SOURCE
+READ_DEST
+COMPARE
+
+rm -f $T{1} ${T2} ${T3} ${T4} ${T_DEST} ${T_SOURCE}
+
+#### END ####

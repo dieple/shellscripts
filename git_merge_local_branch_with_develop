@@ -1,0 +1,73 @@
+#!/bin/bash
+
+###
+#
+# this is use when you're on a branch wanting to pull the
+# latest from develop branch or based on another branch
+#
+###
+
+
+PROG="`basename $0`"
+BRANCH_NAME=""
+
+perform_merge()
+{
+	# you have a clean branch
+	# so go ahead merge/sync develop with
+	# your local branch
+	#git checkout develop
+	git fetch
+	
+	# now switch back to your local branch and merge
+	#git checkout $BRANCH_NAME
+	git merge origin/develop
+}
+
+#
+# Main program
+#
+
+cd $LUCAS_HOME
+BRANCH_NAME=`git status | head -1 | sed 's/\# On branch //g'`
+
+if [ "$BRANCH_NAME" = "develop" ]
+then
+	# you're already on develop - so use rebase to update the local sandbox
+	git fetch
+	git rebase origin/develop
+	exit 0
+fi
+
+git status | tail -1 | grep "nothing to commit, working directory clean"
+
+if [ "$?" -eq 0 ]
+then
+	perform_merge
+else
+	echo "Cannot merge with develop - uncommitted changes present"
+	echo "Do you want to continue [y/n] ?"
+	read YESNO
+	if [ "$YESNO" = "y" -o "$YESNO" = "Y" ]
+	then
+		echo "Choose Stash [s] or Commit [c]? And then perform merge"
+		read ANS
+
+		if [ "$ANS" = "s" -o "$ANS" = "S" ]
+		then
+			git stash
+			perform_merge
+			git stash apply
+		elif [ "$ANS" = "c" -o "$ANS" = "C" ]
+		then
+			git commit -a
+			perform_merge
+		else
+			echo "Unknown response - No changes"
+			exit 1
+		fi
+	else
+		# no changes applied
+		exit 0
+	fi
+fi

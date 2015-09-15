@@ -1,0 +1,119 @@
+#!/bin/sh
+
+VOICESTATUS=""
+ORASTATUS=""
+LISTENERSTATUS=""
+
+get_statuses()
+{
+	#
+	# Work out if Oracle listener is up
+	#
+
+	lsnrctl status $ORACLE_SID >/dev/null
+
+	if [ $? = 0 ]
+	then
+		LISTENERSTATUS="UP"
+	else
+		LISTENERSTATUS="DOWN"
+	fi
+
+	#
+	# Work out if Oracle database is up
+	#
+
+	databaseup > /dev/null
+
+	if [ "$?" = "1" ]
+	then
+		ORASTATUS="UP"
+	else
+		ORASTATUS="DOWN"
+	fi
+
+}
+
+#
+# Main
+#
+
+purgedblogs -p 7
+
+get_statuses
+
+
+if [ $ORASTATUS = "UP" ]
+then
+	if [ -x "$ORACLE_HOME/bin/svrmgrl$EXE" ]
+	then
+		DBADMIN="svrmgrl$EXE"
+	else
+		DBADMIN="sqlplus /nolog"
+	fi
+
+	echo "Stopping Oracle database..."
+
+	$DBADMIN << ! > /dev/null 2>&1
+		connect $DCS_SYSINTERNAL as sysdba
+		shutdown immediate
+!
+
+	databaseup
+
+	if [ $? = 1 ]
+	then
+		echo  "Failed to stop Oracle database...abort"
+		exit 1
+	fi
+else
+	echo "Oracle database is already stopped"
+fi
+
+if [ $LISTENERSTATUS = "UP" ]
+then
+	echo  "Stopping Oracle listener..."
+
+	lsnrctl stop $ORACLE_SID > /dev/null 2>&1
+
+	if [ $? != 0 ]
+	then
+		echo "Failed to stop Oracle listener...abort"
+		exit 1
+	fi
+else
+	echo "Oracle listener is already stopped"
+fi
+
+echo ""
+echo "Purging log files..."
+echo ""
+
+PURGEDAYS="7"
+
+if [ -d "/tmp" ]
+then
+	sudo find /tmp \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+if [ -d "$APPS_HOME" ]
+then
+	sudo find $APPS_HOME -name server.log.* \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+if [ -d "$APACHE_HOME" ]
+then
+	mv $APACHE_HOME/logs/access_log $APACHE_HOME/logs/access_log.$$
+	mv $APACHE_HOME/logs/error_log $APACHE_HOME/logs/error_log.$$
+	sudo find $APACHE_HOME -name *_log.* \
+		-type f -mtime +$PURGEDAYS \
+		-print -exec rm -f {} \;
+fi
+
+rm -f $HOME/nohup.out
+
+purgerdtlogs

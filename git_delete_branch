@@ -1,0 +1,75 @@
+#!/bin/bash
+
+###
+# To delete local branch
+# git branch -d branch_name
+# E.g.
+# git branch -d my-branch
+# 
+# To delete a remote branch
+# git branch -d -r remote_name/branch_name
+# E.g.
+# git branch -d -r origin/my-branch
+# If you are sure you want to delete it, run 'git branch -D feature/PHX-724-Export-Data-to-Excel-Pdf'.
+###
+
+PROG="`basename $0`"
+BRANCH=""
+REMOTE="FALSE"
+
+usage()
+{
+	echo ""
+	echo "Usage: $PROG [options]"
+	echo ""
+	echo "[-b branch]   Local branch to delete"
+	echo ""
+	echo "[-r remote]   delete remote branch"
+	echo ""
+}
+
+
+#
+# Main program
+#
+
+while getopts "b:r?" 2> /dev/null ARG
+do
+	case $ARG in
+
+		b)	BRANCH=$OPTARG;;
+
+		r)	REMOTE="TRUE";;
+
+		?)	usage
+			exit 1;;
+	esac	
+done
+
+if [ "$BRANCH" = "" ]
+then
+        echo ""
+        echo "$PROG: branch name is required !"
+        echo ""
+	usage
+        exit 1
+fi
+
+
+cd $LUCAS_HOME
+# Make sure you're on another branch before you can delete the current branch
+git_checkout_develop
+
+# now delete the local branch
+git branch -d $BRANCH
+
+if [ "REMOTE" = "TRUE" ]
+then
+	#git branch -d -r origin/$BRANCH
+	git branch -D $BRANCH
+
+fi
+
+###
+# End
+###

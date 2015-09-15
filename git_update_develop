@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd $LUCAS_HOME
+~/bin/git_checkout_develop
+~/bin/git_fetch
+#~/bin/git_rebase_branch -d
+#git merge origin/develop
+git rebase origin/develop

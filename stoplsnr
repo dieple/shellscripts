@@ -1,0 +1,76 @@
+#!/bin/sh
+################################################################################
+#                                                                              #
+#   Copyright (c) 2004                                                         #
+#   RedPrairie Corporation                                                     #
+#   All Rights Reserved                                                        #
+#                                                                              #
+#   The information in this file contains trade secrets and confidential       #
+#   information which is the property of RedPrairie Corporation.               #
+#                                                                              #
+#   All trademarks, trade names, copyrights and other intellectual property    #
+#   rights created, developed, embodied in or arising in connection with       #
+#   this software shall remain the sole property of RedPrairie Corporation.    #
+#                                                                              #
+#   Copyright (c) RedPrairie Corporation, 2004                                 #
+#   ALL RIGHTS RESERVED                                                        #
+#                                                                              #
+################################################################################
+
+################################################################################
+#                                                                              #
+#      SCRIPT NAME:     stoplsnr                                               #
+#                                                                              #
+#      DESCRIPTION:     Wrapper to kill Talkman listener daemon                #
+#                       Note this script is used in demo/testing purposes      #
+#                       and not on production environment                      #
+#                                                                              #
+#   RELEASE  DATE     BY   PROJ   ID       DESCRIPTION                         #
+#   ======== ======== ==== ====== ======== =============                       #
+#   dcs 800  27/01/03 DL   DCS    NEW6488  Voice Stock Checking.               #
+#   dcs 810  18/06/03 DL   DCS    NEW6535  Voice Container Picking.            #
+#   2005.1.2 19/07/05 DL   DCS    NEW7841  Voice system directed enhancements  #
+#   2005.2.1 13/12/05 JH   DCS    BUG1942  Linux problem in scripts with ps    #
+#   2005.2.2 21/12/05 JH   DCS    BUG1989  Problem caused by Bug 1942          #
+#   2006.2.1 27/11/06 JH   DCS    ENH3365  Porting to solaris (ps command)     #
+################################################################################
+
+#
+# We need to kill the listener with the -15 option so that
+# the thread will exit cleanly and deallocate context and resources.
+#
+if [ "$MTYPE" = "WNT" ]
+then
+	line=$(pscmd -e | grep tmnlsrdae | grep -v grep | sed 's/	/x/g' | awk '{ print $2 }' )
+else
+	line=$(pscmd -e | grep tmnlsrdae | grep -v grep | sed 's/	/x/g' | awk '{ print $4 }' )
+fi
+
+PID=$(echo ${line} | awk '{ print $1 }')
+
+if [ "$PID" != "" ] 
+then
+	kill -15 ${PID}
+	sleep 4
+fi
+
+#
+# kill the logging process
+#
+if [ "$MTYPE" = "WNT" ]
+then
+	line2=$(pscmd -e | grep "tmnlog" | grep -v grep | sed 's/	/x/g' | awk '{ print $2 }' )
+else
+	line2=$(pscmd -e | grep "tmnlog" | grep -v grep | sed 's/	/x/g' | awk '{ print $4 }' )
+fi
+
+PID2=$(echo ${line2} | awk '{ print $1 }')
+
+if [ "$PID2" != "" ] 
+then
+	kill -9 ${PID2}
+fi
+
+###
+# End
+###

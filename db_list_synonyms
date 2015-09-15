@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_list_synonyms
+#
+# Author           :	DL
+#
+# Usage            :    db_list_synonyms
+#
+# Description      :	list all synonyms this DB_LOGIN has access to
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+
+cat <<!
+$(basename $0) - list all synonyms this DB_LOGIN has access to 
+
+Usage: $(basename $0)
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 0 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+LIST_SYNONYMS(){
+
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select owner||'.'||object_name from all_objects
+where object_type = 'SYNONYM'
+and owner <> 'SYS' and owner <> 'SYSTEM'
+order by 1;
+!
+}
+
+
+####
+# Main
+####
+
+CHK_PARAM
+LIST_SYNONYMS
+
+#### END #### 

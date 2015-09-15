@@ -1,0 +1,125 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_object_type
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <Object (Table/View) name>
+#
+# Description      :	display the value of OBJECT_TYPE column
+#			from USER_OBJECTS table. 
+#			Exit 1 if not found, exit 0 if found.
+#
+# Calls            :	db_run_query_pipe
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+#set -x
+VARS(){
+OBJECT_FULL_NAME=$(echo ${1} | tr '[a-z]' '[A-Z]')
+OBJECT_NAME=$(echo ${OBJECT_FULL_NAME} | sed 's/.*\.//')
+# this is owner based information
+OBJECT_OWNER=$(echo ${OBJECT_FULL_NAME} | sed 's/\..*//')
+T1=/tmp/$$.${LOGNAME}.out1
+T2=/tmp/$$.${LOGNAME}.out2
+}
+
+USAGE(){
+cat <<!
+$(basename $0) - display the value of OBJECT_TYPE column 
+from USER_OBJECTS table. Exit 1 if not found, exit 0 if found. 
+
+Usage: $(basename $0) <Object (Table/View) name>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+   echo "Error: Incorrect number of arguments" >&2
+   USAGE
+   exit 1
+fi
+}
+
+SELECT_OBJ_NAME(){
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select OBJECT_TYPE
+from ALL_OBJECTS
+where OBJECT_NAME = '${OBJECT_NAME}';
+!
+}
+
+SELECT_OWNER_OBJ(){
+cat <<! | ${HOME}/bin/db_run_query_pipe
+set pages 0;
+set feedback off;
+select OBJECT_TYPE
+from ALL_OBJECTS
+where OWNER = '${OBJECT_OWNER}'
+and OBJECT_NAME = '${OBJECT_NAME}';
+select 'INDEX'
+from ALL_INDEXES
+where OWNER = '${OBJECT_OWNER}'
+and INDEX_NAME = '${OBJECT_NAME}';
+!
+}
+
+ERROR_CHK(){
+
+if grep "ERROR" $T1 >/dev/null 2>&1
+then
+    cat $T1 >&2
+    rm -f $T1 $T2
+    exit 1
+fi
+}
+
+####
+# Main
+####
+
+VARS $1
+CHK_PARAM $1
+
+if [ "${OBJECT_NAME}" = "${OBJECT_FULL_NAME}" ]
+then
+    SELECT_OBJ_NAME | tee $T1 | grep -v "SYNONYM" > $T2 2>&1
+else
+    SELECT_OWNER_OBJ | tee $T1 | grep -v "SYNONYM" > $T2 2>&1
+fi
+
+ERROR_CHK
+
+if [ -s "$T2" ] 	# object ${1} exists
+then
+    cat $T2
+    rm -f  $T1 $T2
+    exit 0
+elif [ -s "$T1" ]  	# SYNONYM ${1} exists
+then
+    cat $T1
+    rm -f $T1 $T2
+    exit 0
+else
+    rm -f $T1 $T2       # object ${1} does not exist
+    exit 1
+fi
+
+#### End ####

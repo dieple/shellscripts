@@ -1,0 +1,79 @@
+# ---------------------------------------------------------------------
+#
+#
+# Script Name      :	db_report
+#
+# Author           :	DL
+#
+# Usage            : 	$(basename $0) <$1 - Path to SQL script file>
+#
+# Description      :	Run SQL script nohup'ed in background 
+#			with no extraneous info
+#
+# Calls            :	db_run_query_script
+#
+# Called By        :	None
+#
+#
+# ---------------------------------------------------------------------
+# Revision History
+#
+#
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0     29-11-2000  Created
+#
+# =====================================================================
+
+
+USAGE(){
+cat <<!
+$(basename $0) - Run SQL script nohup'ed in background with no extraneous info 
+
+Usage: $(basename $0) <$1 - Path to SQL script file>
+!
+}
+
+CHK_PARAM(){
+
+if [ $# -ne 1 ]
+then
+    echo "Error: Incorrect number of arguments" >&2
+    echo "${USAGE}" >&2
+    exit 1
+fi
+}
+
+CHK_FILE(){
+
+if [ ! -r "$1" ]
+then
+    echo "Error: ${1} not a read-able file:" >&2
+    USAGE >&2
+    exit 1
+fi
+}
+
+REPORT(){
+
+echo "START_TIME = $(date)" >$1.out 
+
+if [ ! -w "$1.out" ]
+then
+    echo "Error: $1.out not a write-able file:" >&2
+    USAGE >&2
+    exit 1
+fi
+
+nohup ${HOME}/bin/db_run_query_script ${1} >$1.out 2>&1 &
+}
+
+####
+# Main
+####
+
+CHK_PARAM $1
+CHK_FILE $1 
+REPORT $1
+
+#### END ####

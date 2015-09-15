@@ -1,0 +1,102 @@
+# =====================================================================
+#
+# Script Name : db_verify_script
+#
+# Usage       : $0 -s
+#    -s         SCRIPTID - script identifier to verify
+#
+# Description : Verify's if a script exists by the id# 
+#
+# Called by   : Script Ctl Application /
+#               Admin Tool /
+#               or can be run stand alone - see Usage
+#
+# ---------------------------------------------------------------------
+# Revision History
+# Version    Date     Description
+# ---------------------------------------------------------------------
+# 1.0.0   24-09-1999  Created
+# =====================================================================
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# USAGE
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+USAGE="
+$0 - scriptctl utility - verify a script exists by ID 
+Version 1.0.0
+Usage: $0 -s
+\t-s         SCRIPTID - script identifier
+"
+
+function Usage {
+   if [[ -n $1 ]];
+   then
+      echo "$0: --illegal option -- $1"
+      echo "${USAGE}" >&2
+   else
+      echo "Error: Insufficient arguments"
+      echo "${USAGE}" >&2
+   fi
+
+   exit 1
+}
+
+
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+# M A I N
+# =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+while getopts "s:" option;
+do
+    case "$option" in
+    s) _SCRIPTID="${OPTARG}";;
+    *) Usage $option;;
+    esac
+done
+
+if [[ -z "$_SCRIPTID" ]]; 
+then
+   Usage;
+fi
+
+
+PROGSTATUS=`DB_run_query_pipe <<! 
+
+SET SERVEROUTPUT ON 
+SET FEEDBACK OFF
+
+DECLARE
+   p_error            NUMBER        :=0;
+   p_error_message    VARCHAR2(255) :=NULL;
+
+   v_task_id          NUMBER(10);
+   v_script_name      VARCHAR2(50);
+   v_script_seqno     NUMBER(10);
+   v_script_live      VARCHAR2(1);
+   v_script_params    VARCHAR2(50);
+
+BEGIN
+
+IF NOT pk_audit_lib.au_get_script_details(
+      $_SCRIPTID  
+     ,v_task_id   
+     ,v_script_name 
+     ,v_script_seqno
+     ,v_script_live
+     ,v_script_params
+     ,p_error     
+     ,p_error_message)
+THEN
+     dbms_output.put_line('-1');
+ELSE
+     dbms_output.put_line('0');
+END IF;
+
+END;
+/
+!`
+
+echo $PROGSTATUS
