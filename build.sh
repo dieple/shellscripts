@@ -21,3 +21,7 @@ sudo docker run --detach -v /apps/sandboxes:/apps/sandboxes -p 8080:8080 -p 3000
 # Now run the cassandra DB container
 sudo docker run --detach dieple/apidocker-cassandra
 
+
+
+#for centos android emulator on intellij:
+sudo yum install zlib.i686 libstdc++.i686
