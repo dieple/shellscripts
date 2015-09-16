@@ -1,0 +1,8 @@
+#!/bin/bash
+
+PROCESS_ID=`ps -ef| grep "java.io.tmpdir=$TOMCAT_HOME/temp org.apache.catalina.startup.Bootstrap start" | grep -v grep | awk '{print $2}'`
+
+if [ -n "$PROCESS_ID" ]
+then
+	kill -9 $PROCESS_ID
+fi
