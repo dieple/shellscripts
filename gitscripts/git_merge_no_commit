@@ -1,0 +1,25 @@
+  #git fetch
+  #git_merge_local_branch_with_develop 
+  #git push origin feature/PHX-958-New-User-Widget-Management-BE
+  #git checkout develop
+  #get fetch
+  #git fetch
+  #git rebase origin/develop
+  #git checkout -b feature/PHX-958-New-User-Widget-Management-BE-2
+  #git merge --no-commit feature/PHX-958-New-User-Widget-Management-BE-2
+  #git statua
+  ##git status
+  #git merge --no-commit feature/PHX-958-New-User-Widget-Management-BE
+  #git commit -a -m"create new branch merge"
+
+
+git fetch
+[10:17:56 AM] ravi. movva: git merge --no-commit origin/develop
+[10:18:16 AM] ravi. movva: git commit -m "rebased with latest develop"
+[10:18:31 AM] ravi. movva: git push origin <remotebranch>
+[10:34:57 AM] ravi. movva: -----------------------------------------------
+[10:34:59 AM] ravi. movva: cd lucas-services
+mvn liquibase:clearCheckSums
+mvn -Dliquibase.rollbackCount=2
+mvn liquibase:update
+

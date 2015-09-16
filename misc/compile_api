@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd $LUCAS_HOME/lucas-rest-api
+mvn clean compile
