@@ -1,3 +1,0 @@
-#! /bin/bash
-
-cat ~/bin/new_features | tail -1

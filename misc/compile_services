@@ -1,4 +1,0 @@
-#!/bin/bash
-
-cd $LUCAS_HOME/lucas-services
-mvn clean compile

@@ -1,1 +1,0 @@
-/apps/sandboxes/dlxwhsr_20131_branch/server/source/bin/lis/scheduler.sh
