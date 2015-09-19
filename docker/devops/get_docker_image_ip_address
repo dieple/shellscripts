@@ -1,0 +1,6 @@
+# put the below in .bash_profile file
+
+docker-ip() {
+  docker inspect --format '{{ .NetworkSettings.IPAddress }}' "$@"
+}
+
