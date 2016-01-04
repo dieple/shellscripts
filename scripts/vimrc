@@ -1,0 +1,14 @@
+# rename as ~/.vimrc on taget machine
+
+filetype plugin indent on
+syntax on
+
+" turn off auto adding comments on next line
+" " so you can cut and paste reliably
+" set fo=tcq
+"
+" " no literal tabs
+" set expandtab
+" set tabstop=2
+" set softtabstop=2
+" set shiftwidth=2
