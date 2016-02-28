@@ -2430,8 +2430,8 @@ cat <<!
 USER : $BY $BOLD $LOGNAME $RESET $DC    ||    MACHINE :  $BOLD $HOST $RESET    ||     DATE : $BOLD $MYDATE $RESET    ||
 ================================================================================
 
-   	      $BOLD#3 EQUIFAX PLC. $RESET
-       	      $BOLD#4 EQUIFAX PLC. $RESET
+   	      $BOLD#3$RESET
+       	      $BOLD#4 $RESET
 
 
 	1  .................... Telnet Hercules
@@ -3096,13 +3096,6 @@ rm -f permfix
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DBRQP
@@ -3175,13 +3168,6 @@ sqlplus -s ${DB_LOGIN}
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -3353,13 +3339,6 @@ PROCESS_SEGMENT
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_OBJECT_EXISTS
@@ -3426,13 +3405,6 @@ exit 1
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -3513,14 +3485,6 @@ CHK_TABLE $1 $2
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
-#
 #
 # Script Name      :	DB_OBJECT_LIST
 #
@@ -3592,14 +3556,6 @@ GET_LIST | sort
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
-#
 #
 # Script Name      :	DB_COLUMN_IS_PRIMARY_INDEX
 #
@@ -3722,13 +3678,6 @@ fi
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_OBJECT_LIST_LIKE
@@ -3798,13 +3747,6 @@ GET_LIST $1  | sort
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -3891,13 +3833,6 @@ DESCRIBE $1 $2
 ##
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_OBJECT_NOT_EXISTS
@@ -3966,13 +3901,6 @@ exit 0
 # DB_column_type
 ##
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -4067,13 +3995,6 @@ DESCRIBE $1 $2
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -4207,12 +4128,6 @@ fi
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -4393,13 +4308,6 @@ rm -f $T{1} ${T2} ${T3} ${T4} ${T_DEST} ${T_SOURCE}
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_REPORT
@@ -4486,13 +4394,6 @@ REPORT $1
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_COUNT_ROWS
@@ -4574,13 +4475,6 @@ COUNT_ROWS $1
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -4667,13 +4561,6 @@ RUN_SCRIPT $1
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_DESC
@@ -4755,13 +4642,6 @@ grep -v '^$' | sed -e 's/^ //' -e 's/NOT NULL/        /'
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -4845,13 +4725,6 @@ GET_COLUMN $1 $2 $3
 ##
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_IS_UP
@@ -4928,13 +4801,6 @@ fi
 # DB_segment_size
 ##
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -5020,13 +4886,6 @@ GET_BYTES $1
 ##
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_LIST_INDEXES
@@ -5100,13 +4959,6 @@ SELECT_INDEXES
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -5194,13 +5046,6 @@ GET_TABLESPACE $1
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_LIST_INDEXES2
@@ -5275,13 +5120,6 @@ SELECT_INDEXES
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_LIST_SYNONYMS
@@ -5355,13 +5193,6 @@ LIST_SYNONYMS
 
 #!/bin/ksh
 # ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
-# ---------------------------------------------------------------------
 #
 #
 # Script Name      :	DB_LIST_TABLES
@@ -5430,13 +5261,6 @@ SELECT_TABLES
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -5507,13 +5331,6 @@ SELECT_VIEWS
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -5613,13 +5430,6 @@ print "${DB_LOGIN}" | ${SQLLOADER} CONTROL=${ctlfile} DATA=${datafile}
 ##
 
 #!/bin/ksh
-# ---------------------------------------------------------------------
-#         ##################################################
-#
-#              Copyright(C)  ------  EQUIFAX PLC
-#
-#         ##################################################
-#
 # ---------------------------------------------------------------------
 #
 #
@@ -5727,7 +5537,6 @@ rm -f ${TMPFILE} ${TMPFILE2} ${VIEWFILE} ${TABFILE}
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%  
 #
@@ -5746,7 +5555,7 @@ rm -f ${TMPFILE} ${TMPFILE2} ${VIEWFILE} ${TABFILE}
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -6201,7 +6010,6 @@ mv ttt $HOME/prod/workspace/ldr_dim2k.ctl
 *************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -6213,7 +6021,7 @@ mv ttt $HOME/prod/workspace/ldr_dim2k.ctl
 # Called by   : combine_harvester.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -11861,7 +11669,6 @@ done
 *********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -11873,7 +11680,7 @@ done
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -12121,7 +11928,6 @@ group by id;
 *************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -12133,7 +11939,7 @@ group by id;
 # Called by   : combine_harvester.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -12218,7 +12024,6 @@ remove_dupes
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -12233,7 +12038,7 @@ remove_dupes
 #
 # Called by   : All IA shell programs
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -12337,7 +12142,6 @@ DIM2K_IDX=DIM2KIDX
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : gen_hkeys.sh  
 #
@@ -12357,7 +12161,7 @@ DIM2K_IDX=DIM2KIDX
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : @(#)gen_hkeys.sh	1.1 04/05/01 [Equifax Plc]
+# What Usage  : @(#)gen_hkeys.sh	1.1 04/05/01
 #
 # =====================================================================
 
@@ -12838,7 +12642,6 @@ done
 #!/bin/ksh
 set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -12850,7 +12653,7 @@ set -x
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -12912,7 +12715,6 @@ load_end ${FEED}
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_code.sh
 #
@@ -12923,7 +12725,7 @@ load_end ${FEED}
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_code.sh	1.1 04/04/01 [Equifax Plc]
+# What Usage  : @(#)load_code.sh	1.1 04/04/01
 #
 # =====================================================================
 
@@ -13501,7 +13303,6 @@ error_chk $? run_business
 **********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_complaints.sh
 #
@@ -13513,7 +13314,7 @@ error_chk $? run_business
 # Called by   : Script Controller Application run_complaints.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_complaints.sh	1.3 03/30/01 [Equifax Plc]
+# What Usage  : @(#)load_complaints.sh	1.3 03/30/01
 #
 # =====================================================================
 
@@ -13528,7 +13329,8 @@ usage ()
 fixed_block ()
 {
 	filename=${IA_LOAD}/complaints
-	cat ${filename} | tr -d ""| awk '{printf "%-80s\n",$0}' > ${filename}.out
+	cat ${filename} | tr -d "
+"| awk '{printf "%-80s\n",$0}' > ${filename}.out
 }
 
 load ()
@@ -13575,7 +13377,6 @@ rm -r colinfofile c.c c.out nohup.out 2>/dev/null
 ********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_deceased.sh
 #
@@ -13587,7 +13388,7 @@ rm -r colinfofile c.c c.out nohup.out 2>/dev/null
 # Called by   : Script Controller Application run_deceased.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_deceased.sh	1.4 04/10/01 [Equifax Plc]
+# What Usage  : @(#)load_deceased.sh	1.4 04/10/01
 #
 # =====================================================================
 
@@ -13737,7 +13538,6 @@ loading
 *****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -13749,7 +13549,7 @@ loading
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -13802,7 +13602,6 @@ ${IA_BIN}/ia_reports.sh END
 #!/bin/ksh
 set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M% 
 #
@@ -13814,7 +13613,7 @@ set -x
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -13877,7 +13676,6 @@ load_end ${FILE}
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -13889,7 +13687,7 @@ load_end ${FILE}
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -13959,7 +13757,6 @@ load_end ${FILE}
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_mps.sh
 #
@@ -13971,7 +13768,7 @@ load_end ${FILE}
 # Called by   : Script Controller Application run_mps.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_mps.sh	1.1 04/02/01 [Equifax Plc]
+# What Usage  : @(#)load_mps.sh	1.1 04/02/01
 #
 # =====================================================================
 
@@ -14025,7 +13822,6 @@ rm -r c.c c.out colinfofile nohup.out 2>/dev/null
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_paf.sh
 #
@@ -14037,7 +13833,7 @@ rm -r c.c c.out colinfofile nohup.out 2>/dev/null
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_paf.sh	1.1 04/04/01 [Equifax Plc]
+# What Usage  : @(#)load_paf.sh	1.1 04/04/01
 #
 # =====================================================================
 
@@ -14088,7 +13884,6 @@ ${IA_BIN}/ia_reports.sh END
 *********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_pc_events.sh 
 #
@@ -14100,7 +13895,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : Run stand alone
 #               
 #
-# What Usage  : @(#)load_pc_events.sh	1.2 04/10/01 [Equifax Plc]
+# What Usage  : @(#)load_pc_events.sh	1.2 04/10/01
 #
 # =====================================================================
 
@@ -14165,7 +13960,6 @@ ${IA_BIN}/ia_reports.sh END
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : load_town.sh
 #
@@ -14177,7 +13971,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : @(#)load_town.sh	1.1 04/04/01 [Equifax Plc]
+# What Usage  : @(#)load_town.sh	1.1 04/04/01
 #
 # =====================================================================
 
@@ -14231,7 +14025,6 @@ ${IA_BIN}/ia_reports.sh END
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -14243,7 +14036,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -14303,7 +14096,6 @@ load_end   ${FILE}
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -14315,7 +14107,7 @@ load_end   ${FILE}
 # Called by   : Script Controller Application run_ccj.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -14483,7 +14275,6 @@ fi
 ***********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : match_complaints.sh
 #
@@ -14495,7 +14286,7 @@ fi
 # Called by   : Script Controller Application run_complaints.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)match_complaints.sh	1.4 03/30/01 [Equifax Plc]
+# What Usage  : @(#)match_complaints.sh	1.4 03/30/01
 #
 # =====================================================================
 
@@ -14565,7 +14356,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 *********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : match_deceased.sh
 #
@@ -14577,7 +14367,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 # Called by   : Script Controller Application run_deceased.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)match_deceased.sh	1.2 04/02/01 [Equifax Plc]
+# What Usage  : @(#)match_deceased.sh	1.2 04/02/01
 #
 # =====================================================================
 
@@ -14651,7 +14441,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 ********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -14663,7 +14452,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 # Called by   : Script Controller Application run_insight.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -14809,7 +14598,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -14821,7 +14609,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -14964,7 +14752,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : match_mps.sh
 #
@@ -14976,7 +14763,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 # Called by   : Script Controller Application run_mps.sh /
 #               or can be run stand alone
 #
-# What Usage  : @(#)match_mps.sh	1.1 04/02/01 [Equifax Plc]
+# What Usage  : @(#)match_mps.sh	1.1 04/02/01
 #
 # =====================================================================
 
@@ -15050,7 +14837,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 ****************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -15062,7 +14848,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -15201,7 +14987,6 @@ ${IA_BIN}/ia_reports.sh MATCH
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : nams.sh  
 #
@@ -15218,7 +15003,7 @@ ${IA_BIN}/ia_reports.sh MATCH
 #
 # Called by   : Script Controller Application
 #
-# What Usage  : @(#)nams.sh	1.1 04/05/01 [Equifax Plc]
+# What Usage  : @(#)nams.sh	1.1 04/05/01
 #
 # =====================================================================
 
@@ -15279,7 +15064,6 @@ echo "-------------------------------------------------------------------------"
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : namsfilecheck.sh  
 #
@@ -15309,7 +15093,7 @@ echo "-------------------------------------------------------------------------"
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : @(#)namsfilecheck.sh	1.1 04/05/01 [Equifax Plc]
+# What Usage  : @(#)namsfilecheck.sh	1.1 04/05/01
 #
 # =====================================================================
 
@@ -15510,7 +15294,6 @@ echo "${#_INFILE[*]} records processed - End."
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : namsload.sh  
 #
@@ -15552,7 +15335,7 @@ echo "${#_INFILE[*]} records processed - End."
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : @(#)namsload.sh	1.1 04/05/01 [Equifax Plc]
+# What Usage  : @(#)namsload.sh	1.1 04/05/01
 #
 # =====================================================================
 
@@ -16158,7 +15941,6 @@ LOAD_DATA
 #!/bin/ksh
 #set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : paf_update.sh  
 #
@@ -16177,7 +15959,7 @@ LOAD_DATA
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : @(#)paf_update.sh	1.1 04/05/01 [Equifax Plc]
+# What Usage  : @(#)paf_update.sh	1.1 04/05/01
 #
 # =====================================================================
 
@@ -16421,7 +16203,6 @@ ${IA_BIN}/ia_reports.sh END
 *********************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : run_complaints.sh
 #
@@ -16433,7 +16214,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : @(#)run_complaints.sh	1.4 03/30/01 [Equifax Plc]
+# What Usage  : @(#)run_complaints.sh	1.4 03/30/01
 #
 # =====================================================================
 
@@ -16493,7 +16274,6 @@ ${IA_BIN}/ia_reports.sh END
 *******************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : run_deceased.sh
 #
@@ -16505,7 +16285,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : Called by ia_daemon.sh 
 #               or can be run stand alone
 #
-# What Usage  : @(#)run_deceased.sh	1.2 04/02/01 [Equifax Plc]
+# What Usage  : @(#)run_deceased.sh	1.2 04/02/01
 #
 # =====================================================================
 
@@ -16871,7 +16651,6 @@ log "End of program"
 ******************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -16883,7 +16662,7 @@ log "End of program"
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -16932,7 +16711,6 @@ ${IA_BIN}/ia_reports.sh END
 **************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -16944,7 +16722,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : ia_daemon.sh
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -17007,7 +16785,6 @@ ${IA_BIN}/ia_reports.sh END
 **************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : run_mps.sh
 #
@@ -17019,7 +16796,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : Run stand alone
 #
 #
-# What Usage  : @(#)run_mps.sh	1.1 04/02/01 [Equifax Plc]
+# What Usage  : @(#)run_mps.sh	1.1 04/02/01
 #
 # =====================================================================
 
@@ -17103,7 +16880,6 @@ ${IA_BIN}/ia_reports.sh END
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M% 
 #
@@ -17115,7 +16891,7 @@ ${IA_BIN}/ia_reports.sh END
 # Called by   : Script Controller Application run_ccj.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -17216,7 +16992,6 @@ do_sort
 *******************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -17228,7 +17003,7 @@ do_sort
 # Called by   : Script Controller Application run_insight.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -17336,7 +17111,6 @@ do_sort
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -17348,7 +17122,7 @@ do_sort
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -17467,7 +17241,7 @@ ${IA_BIN}/ia_reports.sh SORT "$TMP"
 ***************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
+#
 #
 # Script Name : %M%
 #
@@ -17479,7 +17253,7 @@ ${IA_BIN}/ia_reports.sh SORT "$TMP"
 # Called by   : Script Controller Application xyz.sh /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -17579,7 +17353,6 @@ ${IA_BIN}/ia_reports.sh SORT "$TMP"
 #!/bin/ksh
 set -x
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%  
 #
@@ -17608,7 +17381,7 @@ set -x
 # Called by   : Script Controller Application /
 #               or can be run stand alone
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
@@ -18049,7 +17822,7 @@ PACKAGE  PAF_UPDATE IS
    Description  : Updates the IA House Keys table with
                   PAF changes
 
-   What Usage   : %W% %G% [Equifax Plc]
+   What Usage   : %W% %G%
 
    ======================================================= */
 
@@ -18580,7 +18353,6 @@ END PAF_UPDATE;
 #
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : flash_gordon.sh  [%M%]
 #
@@ -18592,7 +18364,7 @@ END PAF_UPDATE;
 # Called by   : Run stand alone
 #
 #
-# What Usage  : @(#)flash_gordon.sh	1.2 06/06/01 [Equifax Plc]     %W% %G% [Equifax Plc]
+# What Usage  : @(#)flash_gordon.sh	1.2 06/06/01    %W% %G%
 #
 # =====================================================================
 
@@ -18732,7 +18504,6 @@ ________________________________________________________________________________
 ************************
 #!/bin/ksh
 # =====================================================================
-# EQUIFAX PLC (c)
 #
 # Script Name : %M%
 #
@@ -18745,7 +18516,7 @@ ________________________________________________________________________________
 # Called by   : Run stand alone
 #
 #
-# What Usage  : %W% %G% [Equifax Plc]
+# What Usage  : %W% %G%
 #
 # =====================================================================
 
